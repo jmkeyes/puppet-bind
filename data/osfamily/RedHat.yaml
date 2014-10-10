@@ -1,0 +1,22 @@
+---
+bind::config::owner: root
+bind::config::group: named
+
+bind::config::config_path: /etc/named
+
+bind::config::keys_path:  /etc/named/keys
+bind::config::zones_path: /etc/named/zones
+
+bind::config::rndc_key_path: /etc/rndc.key
+
+bind::config::config_main:     /etc/named.conf
+bind::config::config_local:    /etc/named.conf.local
+bind::config::config_options:  /etc/named.conf.options
+bind::config::config_controls: /etc/named.conf.controls
+
+bind::service::services:
+  - named
+
+bind::package::packages:
+  - bind
+  - bind-utils

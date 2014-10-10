@@ -1,0 +1,14 @@
+{
+  "name": "jmkeyes-bind",
+  "version": "0.1.0",
+  "author": "Joshua Michael Keyes <joshua.michael.keyes@gmail.com>",
+  "summary": "Yet Another ISC BIND module.",
+  "license": "Apache 2.0",
+  "source": "https://github.com/jmkeyes/puppet-bind.git",
+  "dependencies": [
+    {"name":"puppetlabs-stdlib","version_requirement":">= 4.1.0"},
+    {"name":"puppetlabs-concat","version_requirement":">= 1.1.1"},
+    {"name":"ripienaar-module_data","version_requirement":">= 0.0.3"}
+  ]
+}
+

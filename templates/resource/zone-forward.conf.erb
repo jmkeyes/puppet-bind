@@ -1,0 +1,8 @@
+zone "<%= @name %>" {
+    type forward;
+
+    <%- if @forward_policy and @forwarders -%>
+    forward <%= @forward_policy %>;
+    forwarders { <%= scope.function_coalesce_array(@forwarders) %> };
+    <%- end -%>
+};

@@ -1,0 +1,7 @@
+$TTL <%= @zone_ttl %>
+$ORIGIN <%= @zone_owner %>
+
+<%= @zone_owner %> <%= @zone_class %> SOA <%= @name %>. <%= @contact %>. (<%= @serial %> <%= @refresh %> <%= @retry %> <%= @expire %> <%= @ttl %>)
+<%- @nameservers.each do |nameserver| -%>
+  IN NS <%= nameserver %>.
+<%- end -%>

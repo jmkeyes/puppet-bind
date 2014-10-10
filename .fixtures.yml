@@ -1,0 +1,13 @@
+fixtures:
+  symlinks:
+    bind: "#{source_dir}"
+  repositories:
+    concat:
+      repo: 'https://github.com/puppetlabs/puppetlabs-concat.git'
+      tag:  '1.1.1'
+    stdlib:
+      repo: 'https://github.com/puppetlabs/puppetlabs-stdlib.git'
+      tag:  '4.2.0'
+    module_data:
+      repo: 'https://github.com/ripienaar/puppet-module-data.git'
+      tag:  '0.0.3'    

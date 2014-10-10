@@ -1,0 +1,19 @@
+---
+bind::package::ensure: installed
+bind::service::ensure: running
+bind::service::enable: true
+
+bind::config::purge_configs: true
+
+bind::config::use_root_hints:    true
+bind::config::use_default_zones: true
+bind::config::use_rfc1918_zones: false
+
+bind::config::check_names_master:   fail
+bind::config::check_names_slave:    warn
+bind::config::check_names_response: ignore
+
+bind::config::rndc_key_name:      'rndc-key'
+bind::config::rndc_key_secret:    'q5oBDu48hb6z3HNf00XwJg=='
+bind::config::rndc_key_algorithm: 'hmac-md5'
+
