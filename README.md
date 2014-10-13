@@ -36,7 +36,10 @@ in your local Hiera configuration. All other configuration keys are located in `
 ## Todo
 
  * Improve RSpec tests; it currently only checks for catalog compilation failures.
+ * Expand on user/group permissions; some distributions do things differently.
+ * Improve zone/record synthesis; it should support comments as well.
  * Move all built-in defined resources into Hiera.
+ * Support SELinux on distributions that use it.
  * Properly support chrooted BIND servers.
  * Extend support to other distributions.
 
