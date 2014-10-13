@@ -6,11 +6,12 @@ group :rake, :test do
 end
 
 group :rake do
-  gem 'rake',          '~> 10.3.2'
-  gem 'rspec',         '~> 3.1.0'
-  gem 'rspec-puppet',  '~> 1.0.1'
-  gem 'puppet-lint',   '~> 1.1.0'
-  gem 'puppet-syntax', '~> 1.3.0'
+  gem 'rake',              '~> 10.3.2'
+  gem 'rspec',             '~> 3.1.0'
+  gem 'rspec-puppet',      '~> 1.0.1'
+  gem 'puppet-lint',       '~> 1.1.0'
+  gem 'puppet-syntax',     '~> 1.3.0'
+  gem 'puppet-blacksmith', '~> 3.0.2'
 end
 
 if puppetversion = ENV['PUPPET_GEM_VERSION']
