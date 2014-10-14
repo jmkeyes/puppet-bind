@@ -2,7 +2,7 @@ module Puppet::Parser::Functions
   newfunction(:coalesce_array, :type => :rvalue) do |arguments|
     collection, sentinel = arguments[0], arguments[1]
 
-    unless arguments.size >= 1
+    if arguments.size < 1 or arguments.size > 2
       raise Puppet::ParseError, "coalesce_array(): Wrong number of arguments; expected at least 1, got #{arguments.size}!"
     end
 
