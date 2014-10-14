@@ -1,16 +1,12 @@
 zone "<%= @name %>" <%- if @class -%><%= @class %><%- end -%> {
     type stub;
-
     file "<%= @database %>";
-
     <%- if @masters -%>
     masters { <%= scope.function_coalesce_array([ @masters ]) %> }
     <%- end -%>
-
     <%- if @allow_transfer -%>
     allow-transfer { <%= scope.function_coalesce_array([ @allow_transfer, 'none' ]) %> }
     <%- end -%>
-
     <%- if @forward_policy and @forwarders -%>
     forward <%= @forward_policy %>;
     forwarders { <%= scope.function_coalesce_array([ @forwarders ]) %> };

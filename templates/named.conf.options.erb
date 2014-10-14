@@ -7,31 +7,24 @@ options {
     auth-nxdomain no;
 
     check-names master <%= @check_names_master %>;
-
     check-names slave <%= @check_names_slave %>;
-
     check-names response <%= @check_names_response %>;
 
     <%- if @default_forwarders -%>
     forwarders { <%= scope.function_coalesce_array([ @default_forwarders ]) %> };
     <%- end -%>
-
     <%- if @allow_update -%>
     allow-update { <%= scope.function_coalesce_array([ @allow_update, 'none' ]) %> };
     <%- end -%>
-
     <%- if @allow_transfer -%>
     allow-transfer { <%= scope.function_coalesce_array([ @allow_transfer, 'none' ]) %> };
     <%- end -%>
-
     <%- if @allow_notify -%>
     allow-notify { <%= scope.function_coalesce_array([ @allow_notify, 'none' ]) %> };
     <%- end -%>
-
     <%- if @allow_recursion -%>
     allow-recursion { <%= scope.function_coalesce_array([ @allow_recursion, 'none' ]) %> };
     <%- end -%>
-
     <%- if @allow_query -%>
     allow-query { <%= scope.function_coalesce_array([ @allow_query, 'none' ]) %> };
     <%- end -%>
