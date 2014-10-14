@@ -12,3 +12,11 @@ bind::config::use_rfc1918_zones: false
 bind::config::check_names_master:   fail
 bind::config::check_names_slave:    warn
 bind::config::check_names_response: ignore
+
+bind::config::default_forwarders: []
+
+bind::config::allow_query:     []
+bind::config::allow_update:    []
+bind::config::allow_notify:    []
+bind::config::allow_transfer:  []
+bind::config::allow_recursion: []
