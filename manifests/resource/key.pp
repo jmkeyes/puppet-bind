@@ -19,9 +19,9 @@
 #
 
 define bind::resource::key (
-  $secret,
-  $ensure     = undef,
-  $algorithm  = undef,
+  $ensure    = present,
+  $algorithm = undef,
+  $secret    = undef,
 ) {
   validate_string($name)
 

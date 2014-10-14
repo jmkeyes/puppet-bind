@@ -12,8 +12,3 @@ bind::config::use_rfc1918_zones: false
 bind::config::check_names_master:   fail
 bind::config::check_names_slave:    warn
 bind::config::check_names_response: ignore
-
-bind::config::rndc_key_name:      'rndc-key'
-bind::config::rndc_key_secret:    'q5oBDu48hb6z3HNf00XwJg=='
-bind::config::rndc_key_algorithm: 'hmac-md5'
-

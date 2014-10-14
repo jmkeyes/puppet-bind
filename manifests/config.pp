@@ -19,9 +19,6 @@ class bind::config (
   $config_controls,
   $purge_configs,
   $rndc_key_path,
-  $rndc_key_name,
-  $rndc_key_secret,
-  $rndc_key_algorithm,
   $use_root_hints,
   $use_default_zones,
   $use_rfc1918_zones,
@@ -125,8 +122,8 @@ class bind::config (
 
   file { $rndc_key_path:
     ensure  => link,
-    target  => "${bind::config::keys_path}/${rndc_key_name}.conf",
-    require => Bind::Resource::Key[$rndc_key_name]
+    target  => "${bind::config::keys_path}/rndc-key.conf",
+    require => Bind::Resource::Key['rndc-key']
   }
 
   file { $config_controls:
@@ -138,15 +135,13 @@ class bind::config (
     mode    => '0644'
   }
 
-  # TODO: Move this into Hiera.
-  bind::resource::key { $rndc_key_name:
+  bind::resource::key { 'rndc-key':
     ensure    => present,
-    algorithm => $rndc_key_algorithm,
-    secret    => $rndc_key_secret
+    secret    => hmac('md5', $::fqdn, $::macaddress),
+    algorithm => 'hmac-md5'
   }
 
   if $use_root_hints {
-    # TODO: Move this into Hiera.
     bind::resource::zone { 'root':
       ensure => present,
       source => "puppet:///modules/${module_name}/db.root",
@@ -155,28 +150,24 @@ class bind::config (
   }
 
   if $use_default_zones {
-    # TODO: Move this into Hiera.
     bind::resource::zone { 'localhost':
       ensure => present,
       source => "puppet:///modules/${module_name}/db.localhost",
       type   => 'master'
     }
 
-    # TODO: Move this into Hiera.
     bind::resource::zone { '0.in-addr.arpa':
       ensure => present,
       source => "puppet:///modules/${module_name}/db.0",
       type   => 'master'
     }
 
-    # TODO: Move this into Hiera.
     bind::resource::zone { '127.in-addr.arpa':
       ensure => present,
       source => "puppet:///modules/${module_name}/db.127",
       type   => 'master'
     }
 
-    # TODO: Move this into Hiera.
     bind::resource::zone { '255.in-addr.arpa':
       ensure => present,
       source => "puppet:///modules/${module_name}/db.255",
@@ -206,13 +197,10 @@ class bind::config (
       '168.192.in-addr.arpa',
     ]
 
-    # TODO: Move this into Hiera.
     bind::resource::zone { $rfc1918_zones:
       ensure => present,
       source => "puppet:///modules/${module_name}/db.empty",
       type   => 'master'
     }
   }
-
 }
-
