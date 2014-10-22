@@ -39,3 +39,8 @@ controls {
     inet 127.0.0.1 port 953 allow { 127.0.0.1; } keys { "<%= scope['bind::config::rndc_key_name'] %>"; };
 };
 
+logging {
+    category default {
+        default_syslog;
+    };
+};
