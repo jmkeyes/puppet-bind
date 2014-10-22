@@ -1,9 +1,9 @@
 require 'spec_helper'
 
-describe '::bind::package' do
+describe '::bind::install' do
   shared_examples "a Linux OS" do
     it { should compile.with_all_deps }
-    it { should create_class('bind::package') }
+    it { should create_class('bind::install') }
   end
 
   context "on Debian" do

@@ -1,4 +1,4 @@
-# == Class: bind::package
+# == Class: bind::install
 #
 # Full description of class bind here.
 # 
@@ -11,7 +11,7 @@
 #
 #
 
-class bind::package (
+class bind::install (
   $ensure,
   $packages
 ) {

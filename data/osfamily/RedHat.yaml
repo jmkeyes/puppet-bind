@@ -17,6 +17,6 @@ bind::config::config_controls: /etc/named.conf.controls
 bind::service::services:
   - named
 
-bind::package::packages:
+bind::install::packages:
   - bind
   - bind-utils

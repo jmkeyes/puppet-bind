@@ -17,6 +17,6 @@ bind::config::config_controls: /etc/bind/named.conf.controls
 bind::service::services:
   - bind9
 
-bind::package::packages:
+bind::install::packages:
   - bind9
   - bind9utils

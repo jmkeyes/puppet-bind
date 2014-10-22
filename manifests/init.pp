@@ -20,11 +20,11 @@ class bind (
     fail('This module requires the use of Puppet v.3.6.0 or newer.')
   }
 
-  contain '::bind::package'
+  contain '::bind::install'
   contain '::bind::config'
   contain '::bind::service'
 
-  Class['::bind::package'] ->
+  Class['::bind::install'] ->
   Class['::bind::config']  ~>
   Class['::bind::service']
 
