@@ -3,7 +3,7 @@ bind::install::package_ensure: installed
 bind::service::service_ensure: running
 bind::service::service_enable: true
 
-bind::config::purge_configs: true
+bind::config::config_purge: true
 
 bind::config::use_root_hints:    true
 bind::config::use_default_zones: true

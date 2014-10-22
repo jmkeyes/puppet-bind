@@ -17,7 +17,7 @@ class bind::config (
   $config_local,
   $config_options,
   $config_controls,
-  $purge_configs,
+  $config_purge,
   $rndc_key_path,
   $use_root_hints,
   $use_default_zones,
@@ -35,7 +35,7 @@ class bind::config (
   validate_string($owner)
   validate_string($group)
 
-  validate_bool($purge_configs)
+  validate_bool($config_purge)
 
   validate_absolute_path($config_path)
   validate_absolute_path($config_main)
@@ -80,8 +80,8 @@ class bind::config (
 
   file { $config_path:
     ensure  => directory,
-    recurse => $purge_configs,
-    purge   => $purge_configs,
+    recurse => $config_purge,
+    purge   => $config_purge,
     owner   => $owner,
     group   => $group,
     mode    => '0755'
