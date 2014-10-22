@@ -134,12 +134,10 @@ class bind::config (
   }
 
   file { $managed_keys_path:
-    ensure  => directory,
-    recurse => $purge_configuration,
-    purge   => $purge_configuration,
-    owner   => $owner,
-    group   => $group,
-    mode    => '0755'
+    ensure => directory,
+    owner  => $owner,
+    group  => $group,
+    mode   => '0755'
   }
 
   file { $config_main:
