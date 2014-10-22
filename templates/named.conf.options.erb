@@ -44,6 +44,11 @@ options {
         /* Allow the following addresses/keys to update our DNS records. */
         allow-update { <%= scope.function_coalesce_array([ scope['bind::config::allow_update'], 'none' ]) %> };
 
+    <%- if not scope['bind::config::allow_update_forwarding'].empty? -%>
+        /* Allow the following addresses/keys to submit dynamic updates to a slave for forwarding to a master. */
+        allow-update-forwarding { <%= scope.function_coalesce_array([ scope['bind::config::allow_update_forwarding'], 'none' ]) %> };
+    <%- end -%>
+
         /* Allow zone transfers to servers matching these address or using these keys. */
         allow-transfer { <%= scope.function_coalesce_array([ scope['bind::config::allow_transfer'], 'none' ]) %> };
 

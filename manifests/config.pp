@@ -32,6 +32,7 @@ class bind::config (
   $listen_ipv4,
   $listen_ipv6,
   $allow_update,
+  $allow_update_forwarding,
   $allow_transfer,
   $allow_notify,
   $allow_recursion,
@@ -95,6 +96,7 @@ class bind::config (
   validate_array($listen_ipv6)
 
   validate_array($allow_update)
+  validate_array($allow_update_forwarding)
   validate_array($allow_transfer)
   validate_array($allow_notify)
   validate_array($allow_recursion)

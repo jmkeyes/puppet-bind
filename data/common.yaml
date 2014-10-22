@@ -32,8 +32,10 @@ bind::config::listen_ipv6: []
 bind::config::forward_policy:  first
 bind::config::forwarders:      []
 
+bind::config::allow_update:            []
+bind::config::allow_update_forwarding: []
+
 bind::config::allow_query:     []
-bind::config::allow_update:    []
 bind::config::allow_notify:    []
 bind::config::allow_transfer:  []
 bind::config::allow_recursion: []
