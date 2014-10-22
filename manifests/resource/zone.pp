@@ -11,7 +11,6 @@ define bind::resource::zone (
   $masters        = undef,
   $forwarders     = undef,
   $forward_policy = undef,
-  $nameserver     = $::fqdn,
 ) {
   validate_string($name)
 
@@ -44,44 +43,18 @@ define bind::resource::zone (
     validate_array($forwarders)
   }
 
-  $database = "${bind::config::zones_path}/db.${name}"
+  if $source == undef {
+    fail('Zone databases without backing source files are currently unsupported.')
+  }
 
-  if $source {
-    file { $database:
-      ensure => $ensure,
-      owner  => $bind::config::owner,
-      group  => $bind::config::group,
-      source => $source
-    }
-  } else {
-    concat { $database:
-      ensure  => $ensure,
-      require => Class['concat::setup'],
-      owner   => $bind::config::owner,
-      group   => $bind::config::group,
-      replace => $overwrite,
-      mode    => '0644'
-    }
+  $database = "${bind::config::base_path}/db.${name}"
 
-    concat::fragment { "bind::resource::zone::${name}::header":
-      ensure  => $ensure,
-      content => template("${module_name}/resource/database-header.erb"),
-      target  => $database,
-      order   => 10,
-    }
-
-    bind::resource::record::soa { $name:
-      ensure => $ensure,
-      mname  => $nameserver,
-      owner  => $name
-    }
-
-    concat::fragment { "bind::resource::zone::${name}::footer":
-      ensure  => $ensure,
-      content => template("${module_name}/resource/database-footer.erb"),
-      target  => $database,
-      order   => 90,
-    }
+  file { $database:
+    ensure => $ensure,
+    owner  => $bind::config::owner,
+    group  => $bind::config::group,
+    source => $source,
+    mode   => '0644'
   }
 
   concat::fragment { "bind::resource::zone::${name}::config":
