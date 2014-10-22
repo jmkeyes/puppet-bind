@@ -1,6 +1,5 @@
 source 'https://rubygems.org'
 
-
 group :rake, :test do
   gem 'puppetlabs_spec_helper', '~> 0.8.2'
 end
