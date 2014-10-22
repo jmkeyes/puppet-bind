@@ -1,15 +1,4 @@
 # == Class: bind::install
-#
-# Full description of class bind here.
-# 
-# === Parameters
-# 
-# Document parameters here.
-# 
-# === Examples
-#
-#
-#
 
 class bind::install (
   $package_name,

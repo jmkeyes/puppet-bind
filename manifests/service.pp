@@ -1,15 +1,4 @@
 # == Class: bind::service
-#
-# Full description of class bind here.
-# 
-# === Parameters
-# 
-# Document parameters here.
-# 
-# === Examples
-#
-#
-#
 
 class bind::service (
   $service_name,

@@ -1,61 +1,80 @@
 # == Class: bind::config
-#
-# This class manages the BIND server configuration.
-#
-# === Parameters
-#
-# Document parameters here.
-#
 
 class bind::config (
   $owner,
   $group,
+  $run_path,
+  $base_path,
   $keys_path,
-  $zones_path,
-  $config_path,
   $config_main,
   $config_local,
   $config_options,
-  $config_controls,
-  $config_purge,
+  $purge_configuration,
+  $use_rndc_key,
+  $rndc_key_name,
   $rndc_key_path,
+  $rndc_key_secret,
+  $rndc_key_algorithm,
   $use_root_hints,
   $use_default_zones,
   $use_rfc1918_zones,
-  $check_names_master,
-  $check_names_slave,
-  $check_names_response,
-  $default_forwarders = undef,
-  $allow_update       = undef,
-  $allow_transfer     = undef,
-  $allow_notify       = undef,
-  $allow_recursion    = undef,
-  $allow_query        = undef
+  $check_names_master   = undef,
+  $check_names_slave    = undef,
+  $check_names_response = undef,
+  $listen_ipv4          = undef,
+  $listen_ipv6          = undef,
+  $allow_update         = undef,
+  $allow_transfer       = undef,
+  $allow_notify         = undef,
+  $allow_recursion      = undef,
+  $allow_query          = undef,
+  $forward_policy       = undef,
+  $forwarders           = undef
 ) {
   validate_string($owner)
   validate_string($group)
 
-  validate_bool($config_purge)
+  validate_absolute_path($run_path)
+  validate_absolute_path($base_path)
+  validate_absolute_path($keys_path)
 
-  validate_absolute_path($config_path)
   validate_absolute_path($config_main)
   validate_absolute_path($config_local)
   validate_absolute_path($config_options)
-  validate_absolute_path($config_controls)
 
+  validate_bool($purge_configuration)
+
+  validate_bool($use_rndc_key)
+  validate_string($rndc_key_name)
   validate_absolute_path($rndc_key_path)
+  validate_string($rndc_key_secret)
+  validate_string($rndc_key_algorithm)
 
-  validate_string($check_names_master)
-  validate_re($check_names_master, '^(warn|fail|ignore)$', "\$check_names_master must be one of 'warn', 'fail', or 'ignore'!")
+  validate_bool($use_root_hints)
+  validate_bool($use_default_zones)
+  validate_bool($use_rfc1918_zones)
 
-  validate_string($check_names_slave)
-  validate_re($check_names_slave, '^(warn|fail|ignore)$', "\$check_names_slave must be one of 'warn', 'fail', or 'ignore'!")
+  if $check_names_master {
+    validate_string($check_names_master)
+    validate_re($check_names_master, '^(warn|fail|ignore)$', "\$check_names_master must be one of 'warn', 'fail', or 'ignore'!")
+  }
 
-  validate_string($check_names_response)
-  validate_re($check_names_response, '^(warn|fail|ignore)$', "\$check_names_response must be one of 'warn', 'fail', or 'ignore'!")
+  if $check_names_slave {
+    validate_string($check_names_slave)
+    validate_re($check_names_slave, '^(warn|fail|ignore)$', "\$check_names_slave must be one of 'warn', 'fail', or 'ignore'!")
+  }
 
-  if $default_forwarders {
-    validate_array($default_forwarders)
+  if $check_names_response {
+    validate_string($check_names_response)
+    validate_re($check_names_response, '^(warn|fail|ignore)$', "\$check_names_response must be one of 'warn', 'fail', or 'ignore'!")
+  }
+
+  if $listen_ipv4 {
+    validate_array($listen_ipv4)
+  }
+
+  if $listen_ipv6 {
+    validate_array($listen_ipv6)
   }
 
   if $allow_update {
@@ -78,67 +97,74 @@ class bind::config (
     validate_array($allow_query)
   }
 
-  file { $config_path:
+  if $forward_policy and $forwarders {
+    validate_string($forward_policy)
+    validate_re($forward_policy, '^(first|only)$', "\$forward_policy must be one of 'first' or 'only'!")
+    validate_array($forwarders)
+  }
+
+  file { $base_path:
     ensure  => directory,
-    recurse => $config_purge,
-    purge   => $config_purge,
+    recurse => $purge_configuration,
+    purge   => $purge_configuration,
+    owner   => 'root',
+    group   => $group,
+    mode    => '0755'
+  }
+
+  file { $run_path:
+    ensure  => directory,
+    recurse => $purge_configuration,
+    purge   => $purge_configuration,
+    owner   => 'root',
+    group   => $group,
+    mode    => '0755'
+  }
+
+  file { $keys_path:
+    ensure  => directory,
+    recurse => $purge_configuration,
+    purge   => $purge_configuration,
     owner   => $owner,
     group   => $group,
     mode    => '0755'
   }
 
-  file { [ $keys_path, $zones_path ]:
-    ensure => directory,
-    owner  => $owner,
-    group  => $group,
-    mode   => '0755'
-  }
-
   file { $config_main:
     ensure  => present,
     content => template("${module_name}/named.conf.erb"),
-    require => File[$config_path],
-    owner   => $owner,
+    owner   => 'root',
     group   => $group,
     mode    => '0644'
-  }
-
-  concat { $config_local:
-    ensure  => present,
-    require => File[$config_path],
-    owner   => $owner,
-    group   => $group,
-    mode    => '0644',
   }
 
   file { $config_options:
     ensure  => present,
     content => template("${module_name}/named.conf.options.erb"),
-    require => File[$config_path],
-    owner   => $owner,
+    owner   => 'root',
     group   => $group,
     mode    => '0644'
   }
 
-  file { $rndc_key_path:
-    ensure  => link,
-    target  => "${bind::config::keys_path}/rndc-key.conf",
-    require => Bind::Resource::Key['rndc-key']
+  concat { $config_local:
+    ensure => present,
+    owner  => 'root',
+    group  => $group,
+    mode   => '0644',
   }
 
-  file { $config_controls:
-    ensure  => present,
-    content => template("${module_name}/named.conf.controls.erb"),
-    require => File[$config_path],
-    owner   => $owner,
-    group   => $group,
-    mode    => '0644'
-  }
+  if $use_rndc_key {
+    bind::resource::key { $rndc_key_name:
+      ensure    => present,
+      algorithm => $rndc_key_algorithm,
+      secret    => $rndc_key_secret
+    }
 
-  bind::resource::key { 'rndc-key':
-    ensure    => present,
-    secret    => hmac('md5', $::fqdn, $::macaddress),
-    algorithm => 'hmac-md5'
+    file { $rndc_key_path:
+      ensure  => link,
+      target  => "${bind::config::keys_path}/${rndc_key_name}.conf",
+      require => Bind::Resource::Key[$rndc_key_name]
+    }
   }
 
   if $use_root_hints {

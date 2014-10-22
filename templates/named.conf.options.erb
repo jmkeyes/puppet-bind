@@ -1,31 +1,46 @@
 /* This file is managed by Puppet. Any changes will be overridden. */
 options {
-    directory "<%= @config_path %>";
+        directory "<%= @run_path %>";
 
-    dnssec-validation auto;
+        auth-nxdomain no;
 
-    auth-nxdomain no;
-
-    check-names master <%= @check_names_master %>;
-    check-names slave <%= @check_names_slave %>;
-    check-names response <%= @check_names_response %>;
-
-    <%- if @default_forwarders -%>
-    forwarders { <%= scope.function_coalesce_array([ @default_forwarders ]) %> };
+    <%- if @check_names_master -%>
+        check-names master <%= @check_names_master %>;
+    <%- end -%>
+    <%- if @check_names_slave -%>
+        check-names slave <%= @check_names_slave %>;
+    <%- end -%>
+    <%- if @check_names_response -%>
+        check-names response <%= @check_names_response %>;
+    <%- end -%>
+    <%- if @listen_ipv4 -%>
+        listen-on port 53 { <%= scope.function_coalesce_array([ @listen_ipv4, '127.0.0.1' ]) %> };
+    <%- end -%>
+    <%- if @listen_ipv6 -%>
+        listen-on-v6 port 53 { <%= scope.function_coalesce_array([ @listen_ipv6, '::1' ]) %> };
+    <%- end -%>
+    <%- if @forward_policy and @forwarders -%>
+        forward <%= @forward_policy %>;
+        forwarders { <%= scope.function_coalesce_array([ @forwarders ]) %> };
     <%- end -%>
     <%- if @allow_update -%>
-    allow-update { <%= scope.function_coalesce_array([ @allow_update, 'none' ]) %> };
+        allow-update { <%= scope.function_coalesce_array([ @allow_update, 'none' ]) %> };
     <%- end -%>
     <%- if @allow_transfer -%>
-    allow-transfer { <%= scope.function_coalesce_array([ @allow_transfer, 'none' ]) %> };
+        allow-transfer { <%= scope.function_coalesce_array([ @allow_transfer, 'none' ]) %> };
     <%- end -%>
     <%- if @allow_notify -%>
-    allow-notify { <%= scope.function_coalesce_array([ @allow_notify, 'none' ]) %> };
+        allow-notify { <%= scope.function_coalesce_array([ @allow_notify, 'none' ]) %> };
     <%- end -%>
     <%- if @allow_recursion -%>
-    allow-recursion { <%= scope.function_coalesce_array([ @allow_recursion, 'none' ]) %> };
+        allow-recursion { <%= scope.function_coalesce_array([ @allow_recursion, 'none' ]) %> };
     <%- end -%>
     <%- if @allow_query -%>
-    allow-query { <%= scope.function_coalesce_array([ @allow_query, 'none' ]) %> };
+        allow-query { <%= scope.function_coalesce_array([ @allow_query, 'none' ]) %> };
     <%- end -%>
 };
+
+controls {
+    inet 127.0.0.1 port 953 allow { 127.0.0.1; } keys { "<%= @rndc_key_name %>"; };
+};
+

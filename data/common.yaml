@@ -3,7 +3,12 @@ bind::install::package_ensure: installed
 bind::service::service_ensure: running
 bind::service::service_enable: true
 
-bind::config::config_purge: true
+bind::config::purge_configuration: true
+
+bind::config::use_rndc_key:       true
+bind::config::rndc_key_name:      rndc-key
+bind::config::rndc_key_secret:    KwHfiUQJuNR2bs2/doCC1w==
+bind::config::rndc_key_algorithm: hmac-md5
 
 bind::config::use_root_hints:    true
 bind::config::use_default_zones: true
@@ -13,8 +18,7 @@ bind::config::check_names_master:   fail
 bind::config::check_names_slave:    warn
 bind::config::check_names_response: ignore
 
-bind::config::default_forwarders: []
-
+bind::config::forwarders:      []
 bind::config::allow_query:     []
 bind::config::allow_update:    []
 bind::config::allow_notify:    []
