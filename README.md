@@ -1,5 +1,6 @@
 # Yet Another Puppet ::bind Module
 
+[![Puppet Forge](http://img.shields.io/puppetforge/v/jmkeyes/bind.svg)](https://forge.puppetlabs.com/jmkeyes/bind)
 [![Build Status](https://travis-ci.org/jmkeyes/puppet-bind.svg?branch=master)](https://travis-ci.org/jmkeyes/puppet-bind)
 
 #### Table of Contents
