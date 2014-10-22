@@ -5,11 +5,6 @@ bind::service::service_enable: true
 
 bind::config::purge_configuration: true
 
-bind::config::use_rndc_key:       true
-bind::config::rndc_key_name:      rndc-key
-bind::config::rndc_key_secret:    KwHfiUQJuNR2bs2/doCC1w==
-bind::config::rndc_key_algorithm: hmac-md5
-
 bind::config::use_root_hints:    true
 bind::config::use_default_zones: true
 bind::config::use_rfc1918_zones: false

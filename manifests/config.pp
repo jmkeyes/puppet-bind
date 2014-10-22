@@ -9,6 +9,7 @@ class bind::config (
   $config_main,
   $config_local,
   $config_options,
+  $rndc_key_path,
   $bind_keys_file,
   $managed_keys_path,
   $dnssec_enable,
@@ -18,11 +19,6 @@ class bind::config (
   $version,
   $use_notify,
   $use_recursion,
-  $use_rndc_key,
-  $rndc_key_name,
-  $rndc_key_path,
-  $rndc_key_secret,
-  $rndc_key_algorithm,
   $use_root_hints,
   $use_default_zones,
   $use_rfc1918_zones,
@@ -48,6 +44,7 @@ class bind::config (
   validate_absolute_path($config_local)
   validate_absolute_path($config_options)
 
+  validate_absolute_path($rndc_key_path)
   validate_absolute_path($bind_keys_file)
   validate_absolute_path($managed_keys_path)
 
@@ -69,12 +66,6 @@ class bind::config (
 
   validate_string($use_recursion)
   validate_re($use_recursion, '^(yes|no)$', "\$use_recursion must be one of 'yes' or 'no'!")
-
-  validate_bool($use_rndc_key)
-  validate_string($rndc_key_name)
-  validate_absolute_path($rndc_key_path)
-  validate_string($rndc_key_secret)
-  validate_string($rndc_key_algorithm)
 
   validate_bool($use_root_hints)
   validate_bool($use_default_zones)
@@ -159,18 +150,16 @@ class bind::config (
     mode   => '0644'
   }
 
-  if $use_rndc_key {
-    bind::resource::key { $rndc_key_name:
-      ensure    => present,
-      algorithm => $rndc_key_algorithm,
-      secret    => $rndc_key_secret
-    }
+  bind::resource::key{ 'rndc-key':
+    ensure    => present,
+    secret    => hmac('md5', $::fqdn, $::macaddress),
+    algorithm => 'hmac-md5'
+  }
 
-    file { $rndc_key_path:
-      ensure  => link,
-      target  => "${bind::config::keys_path}/${rndc_key_name}.conf",
-      require => Bind::Resource::Key[$rndc_key_name]
-    }
+  file { $rndc_key_path:
+    ensure  => link,
+    require => Bind::Resource::Key['rndc-key'],
+    target  => "${keys_path}/rndc-key.conf"
   }
 
   if $use_root_hints {
