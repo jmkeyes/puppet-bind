@@ -9,6 +9,7 @@ class bind::config (
   $config_main,
   $config_local,
   $config_options,
+  $dnssec_anchors,
   $purge_configuration,
   $use_rndc_key,
   $rndc_key_name,
@@ -41,6 +42,8 @@ class bind::config (
   validate_absolute_path($config_main)
   validate_absolute_path($config_local)
   validate_absolute_path($config_options)
+
+  validate_absolute_path($dnssec_anchors)
 
   validate_bool($purge_configuration)
 

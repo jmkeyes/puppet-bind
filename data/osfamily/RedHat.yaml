@@ -11,3 +11,4 @@ bind::config::rndc_key_path:  /etc/rndc.key
 bind::config::config_main:    /etc/named.conf
 bind::config::config_local:   /etc/named.conf.local
 bind::config::config_options: /etc/named.conf.options
+bind::config::dnssec_anchors: /etc/named.iscdlv.key
