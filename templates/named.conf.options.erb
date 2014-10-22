@@ -26,11 +26,6 @@ options {
         /* Where to store the automatically maintained DNSSEC security roots. */
         managed-keys-directory "<%= scope['bind::config::managed_keys_path'] %>";
 
-        /* Check hostnames in resource records for RFC 952/1123 compliance. */
-        check-names master <%= scope['bind::config::check_names_master'] %>;
-        check-names slave <%= scope['bind::config::check_names_slave'] %>;
-        check-names response <%= scope['bind::config::check_names_response'] %>;
-
         /* IPv4/IPv6 addresses listen on. */
         listen-on port 53 { <%= scope.function_coalesce_array([ scope['bind::config::listen_ipv4'], '127.0.0.1' ]) %> };
         listen-on-v6 port 53 { <%= scope.function_coalesce_array([ scope['bind::config::listen_ipv6'], '::1' ]) %> };

@@ -22,10 +22,6 @@ bind::config::dnssec_enable:     'yes'
 bind::config::dnssec_validation: auto
 bind::config::dnssec_lookaside:  auto
 
-bind::config::check_names_master:   fail
-bind::config::check_names_slave:    warn
-bind::config::check_names_response: ignore
-
 bind::config::listen_ipv4: []
 bind::config::listen_ipv6: []
 

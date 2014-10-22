@@ -26,9 +26,6 @@ class bind::config (
   $use_root_hints,
   $use_default_zones,
   $use_rfc1918_zones,
-  $check_names_master,
-  $check_names_slave,
-  $check_names_response,
   $listen_ipv4,
   $listen_ipv6,
   $allow_update,
@@ -82,15 +79,6 @@ class bind::config (
   validate_bool($use_root_hints)
   validate_bool($use_default_zones)
   validate_bool($use_rfc1918_zones)
-
-  validate_string($check_names_master)
-  validate_re($check_names_master, '^(warn|fail|ignore)$', "\$check_names_master must be one of 'warn', 'fail', or 'ignore'!")
-
-  validate_string($check_names_slave)
-  validate_re($check_names_slave, '^(warn|fail|ignore)$', "\$check_names_slave must be one of 'warn', 'fail', or 'ignore'!")
-
-  validate_string($check_names_response)
-  validate_re($check_names_response, '^(warn|fail|ignore)$', "\$check_names_response must be one of 'warn', 'fail', or 'ignore'!")
 
   validate_array($listen_ipv4)
   validate_array($listen_ipv6)
