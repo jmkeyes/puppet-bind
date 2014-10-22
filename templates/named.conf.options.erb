@@ -1,48 +1,41 @@
 /* This file is managed by Puppet. Any changes will be overridden. */
 options {
-        directory "<%= @run_path %>";
+        /* The working directory of the nameserver. */
+        directory "<%= scope['bind::config::run_path'] %>";
 
+        /* Conform to RFC1035. */
         auth-nxdomain no;
 
-        dnssec-enable <%= @dnssec_enable %>;
-        dnssec-validation <%= @dnssec_validation %>;
-        dnssec-lookaside <%= @dnssec_lookaside %>;
 
-        bindkeys-file "<%= @bind_keys_file %>";
-        managed-keys-directory "<%= @managed_keys_path %>";
 
-        check-names master <%= @check_names_master %>;
-        check-names slave <%= @check_names_slave %>;
-        check-names response <%= @check_names_response %>;
 
-    <%- if @listen_ipv4 -%>
-        listen-on port 53 { <%= scope.function_coalesce_array([ @listen_ipv4, '127.0.0.1' ]) %> };
+        dnssec-enable <%= scope['bind::config::dnssec_enable'] %>;
+        dnssec-validation <%= scope['bind::config::dnssec_validation'] %>;
+        dnssec-lookaside <%= scope['bind::config::dnssec_lookaside'] %>;
+
+        bindkeys-file "<%= scope['bind::config::bind_keys_file'] %>";
+        managed-keys-directory "<%= scope['bind::config::managed_keys_path'] %>";
+
+        check-names master <%= scope['bind::config::check_names_master'] %>;
+        check-names slave <%= scope['bind::config::check_names_slave'] %>;
+        check-names response <%= scope['bind::config::check_names_response'] %>;
+
+        listen-on port 53 { <%= scope.function_coalesce_array([ scope['bind::config::listen_ipv4'], '127.0.0.1' ]) %> };
+        listen-on-v6 port 53 { <%= scope.function_coalesce_array([ scope['bind::config::listen_ipv6'], '::1' ]) %> };
+
+    <%- if not scope['bind::config::forwarders'].empty? -%>
+        forward <%= scope['bind::config::forward_policy'] %>;
+        forwarders { <%= scope.function_coalesce_array([ scope['bind::config::forwarders'] ]) %> };
     <%- end -%>
-    <%- if @listen_ipv6 -%>
-        listen-on-v6 port 53 { <%= scope.function_coalesce_array([ @listen_ipv6, '::1' ]) %> };
-    <%- end -%>
-    <%- if @forward_policy and @forwarders -%>
-        forward <%= @forward_policy %>;
-        forwarders { <%= scope.function_coalesce_array([ @forwarders ]) %> };
-    <%- end -%>
-    <%- if @allow_update -%>
-        allow-update { <%= scope.function_coalesce_array([ @allow_update, 'none' ]) %> };
-    <%- end -%>
-    <%- if @allow_transfer -%>
-        allow-transfer { <%= scope.function_coalesce_array([ @allow_transfer, 'none' ]) %> };
-    <%- end -%>
-    <%- if @allow_notify -%>
-        allow-notify { <%= scope.function_coalesce_array([ @allow_notify, 'none' ]) %> };
-    <%- end -%>
-    <%- if @allow_recursion -%>
-        allow-recursion { <%= scope.function_coalesce_array([ @allow_recursion, 'none' ]) %> };
-    <%- end -%>
-    <%- if @allow_query -%>
-        allow-query { <%= scope.function_coalesce_array([ @allow_query, 'none' ]) %> };
-    <%- end -%>
+
+        allow-update { <%= scope.function_coalesce_array([ scope['bind::config::allow_update'], 'none' ]) %> };
+        allow-transfer { <%= scope.function_coalesce_array([ scope['bind::config::allow_transfer'], 'none' ]) %> };
+        allow-notify { <%= scope.function_coalesce_array([ scope['bind::config::allow_notify'], 'none' ]) %> };
+        allow-recursion { <%= scope.function_coalesce_array([ scope['bind::config::allow_recursion'], 'none' ]) %> };
+        allow-query { <%= scope.function_coalesce_array([ scope['bind::config::allow_query'], 'none' ]) %> };
 };
 
 controls {
-    inet 127.0.0.1 port 953 allow { 127.0.0.1; } keys { "<%= @rndc_key_name %>"; };
+    inet 127.0.0.1 port 953 allow { 127.0.0.1; } keys { "<%= scope['bind::config::rndc_key_name'] %>"; };
 };
 
