@@ -9,7 +9,11 @@ class bind::config (
   $config_main,
   $config_local,
   $config_options,
-  $dnssec_anchors,
+  $bind_keys_file,
+  $managed_keys_path,
+  $dnssec_enable,
+  $dnssec_validation,
+  $dnssec_lookaside,
   $purge_configuration,
   $use_rndc_key,
   $rndc_key_name,
@@ -43,7 +47,17 @@ class bind::config (
   validate_absolute_path($config_local)
   validate_absolute_path($config_options)
 
-  validate_absolute_path($dnssec_anchors)
+  validate_absolute_path($bind_keys_file)
+  validate_absolute_path($managed_keys_path)
+
+  validate_string($dnssec_enable)
+  validate_re($dnssec_enable, '^(yes|no)$', "\$dnssec_enable must be one of 'yes' or 'no'!")
+
+  validate_string($dnssec_validation)
+  validate_re($dnssec_validation, '^(yes|no|auto)$', "\$dnssec_validation must be one of 'yes', 'no', or 'auto'!")
+
+  validate_string($dnssec_lookaside)
+  validate_re($dnssec_lookaside, '^(yes|no|auto)$', "\$dnssec_lookaside must be one of 'yes', 'no', or 'auto'!")
 
   validate_bool($purge_configuration)
 
@@ -133,6 +147,15 @@ class bind::config (
     mode    => '0755'
   }
 
+  file { $managed_keys_path:
+    ensure  => directory,
+    recurse => $purge_configuration,
+    purge   => $purge_configuration,
+    owner   => $owner,
+    group   => $group,
+    mode    => '0755'
+  }
+
   file { $config_main:
     ensure  => present,
     content => template("${module_name}/named.conf.erb"),
@@ -154,6 +177,14 @@ class bind::config (
     owner  => 'root',
     group  => $group,
     mode   => '0644',
+  }
+
+  file { $bind_keys_file:
+    ensure => present,
+    source => "puppet:///modules/${module_name}/bind.keys",
+    owner  => 'root',
+    group  => $group,
+    mode   => '0644'
   }
 
   if $use_rndc_key {

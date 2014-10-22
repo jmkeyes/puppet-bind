@@ -2,13 +2,14 @@
 bind::service::service_name: named
 bind::install::package_name: bind
 
-bind::config::owner:          named
-bind::config::group:          named
-bind::config::run_path:       /var/named
-bind::config::base_path:      /etc/named
-bind::config::keys_path:      /etc/named.keys.d
-bind::config::rndc_key_path:  /etc/rndc.key
-bind::config::config_main:    /etc/named.conf
-bind::config::config_local:   /etc/named.conf.local
-bind::config::config_options: /etc/named.conf.options
-bind::config::dnssec_anchors: /etc/named.iscdlv.key
+bind::config::owner:             named
+bind::config::group:             named
+bind::config::run_path:          /var/named
+bind::config::base_path:         /etc/named
+bind::config::keys_path:         /etc/named.keys.d
+bind::config::rndc_key_path:     /etc/rndc.key
+bind::config::config_main:       /etc/named.conf
+bind::config::config_local:      /etc/named.conf.local
+bind::config::config_options:    /etc/named.conf.options
+bind::config::bind_keys_file:    /etc/named.iscdlv.key
+bind::config::managed_keys_path: /var/named/dynamic

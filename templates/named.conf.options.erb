@@ -4,6 +4,17 @@ options {
 
         auth-nxdomain no;
 
+        dnssec-enable <%= @dnssec_enable %>;
+        dnssec-validation <%= @dnssec_validation %>;
+        dnssec-lookaside <%= @dnssec_lookaside %>;
+
+    <%- if @bind_keys_file -%>
+        bindkeys-file "<%= @bind_keys_file %>";
+    <%- end -%>
+    <%- if @managed_keys_path -%>
+        managed-keys-directory "<%= @managed_keys_path %>";
+    <%- end -%>
+
     <%- if @check_names_master -%>
         check-names master <%= @check_names_master %>;
     <%- end -%>

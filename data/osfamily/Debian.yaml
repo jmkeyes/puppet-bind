@@ -2,13 +2,14 @@
 bind::service::service_name: bind9
 bind::install::package_name: bind9
 
-bind::config::owner:          bind
-bind::config::group:          bind
-bind::config::run_path:       /var/cache/bind
-bind::config::base_path:      /etc/bind
-bind::config::keys_path:      /etc/bind/keys
-bind::config::rndc_key_path:  /etc/bind/rndc.key
-bind::config::config_main:    /etc/bind/named.conf
-bind::config::config_local:   /etc/bind/named.conf.local
-bind::config::config_options: /etc/bind/named.conf.options
-bind::config::dnssec_anchors: /etc/bind/bind.keys
+bind::config::owner:             bind
+bind::config::group:             bind
+bind::config::run_path:          /var/cache/bind
+bind::config::base_path:         /etc/bind
+bind::config::keys_path:         /etc/bind/keys
+bind::config::rndc_key_path:     /etc/bind/rndc.key
+bind::config::config_main:       /etc/bind/named.conf
+bind::config::config_local:      /etc/bind/named.conf.local
+bind::config::config_options:    /etc/bind/named.conf.options
+bind::config::bind_keys_file:    /etc/bind/bind.keys
+bind::config::managed_keys_path: /var/cache/bind/managed-keys

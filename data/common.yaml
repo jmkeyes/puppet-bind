@@ -14,6 +14,10 @@ bind::config::use_root_hints:    true
 bind::config::use_default_zones: true
 bind::config::use_rfc1918_zones: false
 
+bind::config::dnssec_enable:     'yes'
+bind::config::dnssec_validation: auto
+bind::config::dnssec_lookaside:  auto
+
 bind::config::check_names_master:   fail
 bind::config::check_names_slave:    warn
 bind::config::check_names_response: ignore

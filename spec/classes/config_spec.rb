@@ -18,11 +18,16 @@ describe '::bind' do
 
         it { should contain_file('/etc/bind') }
         it { should contain_file('/etc/bind/keys') }
+
         it { should contain_file('/etc/bind/named.conf') }
         it { should contain_file('/etc/bind/named.conf.options') }
         it { should contain_concat('/etc/bind/named.conf.local') }
+
+        it { should contain_file('/etc/bind/bind.keys') }
         it { should contain_file('/etc/bind/rndc.key') }
+
         it { should contain_file('/var/cache/bind') }
+        it { should contain_file('/var/cache/bind/managed-keys') }
       end
     end
 
@@ -37,11 +42,16 @@ describe '::bind' do
 
         it { should contain_file('/etc/named') }
         it { should contain_file('/etc/named.keys.d') }
+
         it { should contain_file('/etc/named.conf') }
         it { should contain_file('/etc/named.conf.options') }
         it { should contain_concat('/etc/named.conf.local') }
+
+        it { should contain_file('/etc/named.iscdlv.key') }
         it { should contain_file('/etc/rndc.key') }
+
         it { should contain_file('/var/named') }
+        it { should contain_file('/var/named/dynamic') }
       end
     end
   end
