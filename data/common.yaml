@@ -5,7 +5,6 @@ bind::service::service_enable: true
 
 bind::config::purge_configuration: true
 
-bind::config::use_root_hints:    true
 bind::config::use_default_zones: true
 bind::config::use_rfc1918_zones: false
 

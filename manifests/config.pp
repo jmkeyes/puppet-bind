@@ -19,7 +19,6 @@ class bind::config (
   $version,
   $use_notify,
   $use_recursion,
-  $use_root_hints,
   $use_default_zones,
   $use_rfc1918_zones,
   $listen_ipv4,
@@ -67,7 +66,6 @@ class bind::config (
   validate_string($use_recursion)
   validate_re($use_recursion, '^(yes|no)$', "\$use_recursion must be one of 'yes' or 'no'!")
 
-  validate_bool($use_root_hints)
   validate_bool($use_default_zones)
   validate_bool($use_rfc1918_zones)
 
@@ -162,13 +160,11 @@ class bind::config (
     target  => "${keys_path}/rndc-key.conf"
   }
 
-  if $use_root_hints {
-    bind::resource::zone { 'root':
-      ensure => present,
-      source => "puppet:///modules/${module_name}/db.root",
-      type   => 'hint',
-      zone   => '.'
-    }
+  bind::resource::zone { 'root':
+    ensure => present,
+    source => "puppet:///modules/${module_name}/db.root",
+    type   => 'hint',
+    zone   => '.'
   }
 
   if $use_default_zones {
