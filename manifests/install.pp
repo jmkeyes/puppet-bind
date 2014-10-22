@@ -12,16 +12,16 @@
 #
 
 class bind::install (
-  $ensure,
-  $packages
+  $package_name,
+  $package_ensure,
 ) {
-  validate_string($ensure)
-  validate_re($ensure, '^(present|latest|nstalled|[._0-9a-zA-Z:-]+)$')
+  validate_string($package_name)
 
-  validate_array($packages)
+  validate_string($package_ensure)
+  validate_re($package_ensure, '^(present|latest|nstalled|[._0-9a-zA-Z:-]+)$')
 
-  package { $packages:
-    ensure => $ensure
+  package { $package_name:
+    ensure => $package_ensure
   }
 }
 
