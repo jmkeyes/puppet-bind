@@ -5,6 +5,7 @@ define bind::resource::zone (
   $type           = undef,
   $source         = undef,
   $overwrite      = false,
+  $zone           = $name,
   $allow_update   = undef,
   $allow_notify   = undef,
   $allow_transfer = undef,
@@ -13,6 +14,7 @@ define bind::resource::zone (
   $forward_policy = undef,
 ) {
   validate_string($name)
+  validate_string($zone)
 
   validate_string($ensure)
   validate_re($ensure, '^(present|absent|)$', "\$ensure must be one of 'absent' or 'present'!")

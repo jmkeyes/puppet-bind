@@ -1,4 +1,4 @@
-zone "<%= @name %>" {
+zone "<%= @zone %>" {
     type forward;
     <%- if @forward_policy and @forwarders -%>
     forward <%= @forward_policy %>;
