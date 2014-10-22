@@ -5,6 +5,8 @@
   "summary": "Yet Another ISC BIND module.",
   "license": "Apache 2.0",
   "source": "https://github.com/jmkeyes/puppet-bind.git",
+  "project_page": "https://github.com/jmkeyes/puppet-bind",
+  "issues_url": "https://github.com/jmkeyes/puppet-bind/issues",
   "dependencies": [
     {
       "name": "puppetlabs-stdlib",
