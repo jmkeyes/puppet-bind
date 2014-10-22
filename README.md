@@ -1,5 +1,7 @@
 # Yet Another Puppet ::bind Module
 
+[![Build Status](https://travis-ci.org/jmkeyes/puppet-bind.svg?branch=master)](https://travis-ci.org/jmkeyes/puppet-bind)
+
 #### Table of Contents
 
  1. [Overview](#overview)
