@@ -15,15 +15,10 @@ options {
         managed-keys-directory "<%= @managed_keys_path %>";
     <%- end -%>
 
-    <%- if @check_names_master -%>
         check-names master <%= @check_names_master %>;
-    <%- end -%>
-    <%- if @check_names_slave -%>
         check-names slave <%= @check_names_slave %>;
-    <%- end -%>
-    <%- if @check_names_response -%>
         check-names response <%= @check_names_response %>;
-    <%- end -%>
+
     <%- if @listen_ipv4 -%>
         listen-on port 53 { <%= scope.function_coalesce_array([ @listen_ipv4, '127.0.0.1' ]) %> };
     <%- end -%>
