@@ -7,6 +7,12 @@
   "source": "https://github.com/jmkeyes/puppet-bind.git",
   "project_page": "https://github.com/jmkeyes/puppet-bind",
   "issues_url": "https://github.com/jmkeyes/puppet-bind/issues",
+  "requirements": [
+    {
+      "name": "puppet",
+      "version_requirement": ">= 3.6.0"
+    }
+  ],
   "dependencies": [
     {
       "name": "puppetlabs-stdlib",
