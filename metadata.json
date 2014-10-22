@@ -1,6 +1,6 @@
 {
   "name": "jmkeyes-bind",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "author": "Joshua Michael Keyes <joshua.michael.keyes@gmail.com>",
   "summary": "Yet Another ISC BIND module.",
   "license": "Apache 2.0",
@@ -10,15 +10,21 @@
   "operatingsystem_support": [
     {
       "operatingsystem": "RedHat",
-      "operatingsystemrelease": [ "6" ]
+      "operatingsystemrelease": [
+        "6"
+      ]
     },
     {
       "operatingsystem": "CentOS",
-      "operatingsystemrelease": [ "6" ]
+      "operatingsystemrelease": [
+        "6"
+      ]
     },
     {
       "operatingsystem": "Debian",
-      "operatingsystemrelease": [ "7" ]
+      "operatingsystemrelease": [
+        "7"
+      ]
     }
   ],
   "requirements": [
