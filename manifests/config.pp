@@ -26,15 +26,15 @@ class bind::config (
   $check_names_master,
   $check_names_slave,
   $check_names_response,
-  $listen_ipv4          = undef,
-  $listen_ipv6          = undef,
-  $allow_update         = undef,
-  $allow_transfer       = undef,
-  $allow_notify         = undef,
-  $allow_recursion      = undef,
-  $allow_query          = undef,
-  $forward_policy       = undef,
-  $forwarders           = undef
+  $listen_ipv4,
+  $listen_ipv6,
+  $allow_update,
+  $allow_transfer,
+  $allow_notify,
+  $allow_recursion,
+  $allow_query,
+  $forward_policy,
+  $forwarders,
 ) {
   validate_string($owner)
   validate_string($group)
@@ -71,54 +71,27 @@ class bind::config (
   validate_bool($use_default_zones)
   validate_bool($use_rfc1918_zones)
 
-  if $check_names_master {
-    validate_string($check_names_master)
-    validate_re($check_names_master, '^(warn|fail|ignore)$', "\$check_names_master must be one of 'warn', 'fail', or 'ignore'!")
-  }
+  validate_string($check_names_master)
+  validate_re($check_names_master, '^(warn|fail|ignore)$', "\$check_names_master must be one of 'warn', 'fail', or 'ignore'!")
 
-  if $check_names_slave {
-    validate_string($check_names_slave)
-    validate_re($check_names_slave, '^(warn|fail|ignore)$', "\$check_names_slave must be one of 'warn', 'fail', or 'ignore'!")
-  }
+  validate_string($check_names_slave)
+  validate_re($check_names_slave, '^(warn|fail|ignore)$', "\$check_names_slave must be one of 'warn', 'fail', or 'ignore'!")
 
-  if $check_names_response {
-    validate_string($check_names_response)
-    validate_re($check_names_response, '^(warn|fail|ignore)$', "\$check_names_response must be one of 'warn', 'fail', or 'ignore'!")
-  }
+  validate_string($check_names_response)
+  validate_re($check_names_response, '^(warn|fail|ignore)$', "\$check_names_response must be one of 'warn', 'fail', or 'ignore'!")
 
-  if $listen_ipv4 {
-    validate_array($listen_ipv4)
-  }
+  validate_array($listen_ipv4)
+  validate_array($listen_ipv6)
 
-  if $listen_ipv6 {
-    validate_array($listen_ipv6)
-  }
+  validate_array($allow_update)
+  validate_array($allow_transfer)
+  validate_array($allow_notify)
+  validate_array($allow_recursion)
+  validate_array($allow_query)
 
-  if $allow_update {
-    validate_array($allow_update)
-  }
-
-  if $allow_transfer {
-    validate_array($allow_transfer)
-  }
-
-  if $allow_notify {
-    validate_array($allow_notify)
-  }
-
-  if $allow_recursion {
-    validate_array($allow_recursion)
-  }
-
-  if $allow_query {
-    validate_array($allow_query)
-  }
-
-  if $forward_policy and $forwarders {
-    validate_string($forward_policy)
-    validate_re($forward_policy, '^(first|only)$', "\$forward_policy must be one of 'first' or 'only'!")
-    validate_array($forwarders)
-  }
+  validate_string($forward_policy)
+  validate_re($forward_policy, '^(first|only)$', "\$forward_policy must be one of 'first' or 'only'!")
+  validate_array($forwarders)
 
   file { $base_path:
     ensure  => directory,
