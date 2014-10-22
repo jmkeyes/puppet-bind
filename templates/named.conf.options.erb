@@ -6,8 +6,14 @@ options {
         /* Conform to RFC1035. */
         auth-nxdomain no;
 
+        /* Version string to send to requesters. */
+        version "<%= scope['::bind::config::version'] %>";
 
+        /* Allow slave notifications from this server; used for zone transfers. */
+        notify <%= scope['::bind::config::use_notify'] %>;
 
+        /* Allow recursion on this server; used for caching nameservers. */
+        recursion <%= scope['::bind::config::use_recursion'] %>;
 
         dnssec-enable <%= scope['bind::config::dnssec_enable'] %>;
         dnssec-validation <%= scope['bind::config::dnssec_validation'] %>;

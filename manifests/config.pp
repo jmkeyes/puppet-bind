@@ -15,6 +15,9 @@ class bind::config (
   $dnssec_validation,
   $dnssec_lookaside,
   $purge_configuration,
+  $version,
+  $use_notify,
+  $use_recursion,
   $use_rndc_key,
   $rndc_key_name,
   $rndc_key_path,
@@ -54,12 +57,20 @@ class bind::config (
   validate_re($dnssec_enable, '^(yes|no)$', "\$dnssec_enable must be one of 'yes' or 'no'!")
 
   validate_string($dnssec_validation)
-  validate_re($dnssec_validation, '^(yes|no|auto)$', "\$dnssec_validation must be one of 'yes', 'no', or 'auto'!")
+  validate_re($dnssec_validation, '^(yes|no|auto)$', "\$dnssec_validation must be one of 'yes', 'no' or 'auto'!")
 
   validate_string($dnssec_lookaside)
-  validate_re($dnssec_lookaside, '^(yes|no|auto)$', "\$dnssec_lookaside must be one of 'yes', 'no', or 'auto'!")
+  validate_re($dnssec_lookaside, '^(yes|no|auto)$', "\$dnssec_lookaside must be one of 'yes', 'no' or 'auto'!")
 
   validate_bool($purge_configuration)
+
+  validate_string($version)
+
+  validate_string($use_notify)
+  validate_re($use_notify, '^(yes|no)$', "\$use_notify must be one of 'yes' or 'no'!")
+
+  validate_string($use_recursion)
+  validate_re($use_recursion, '^(yes|no)$', "\$use_recursion must be one of 'yes' or 'no'!")
 
   validate_bool($use_rndc_key)
   validate_string($rndc_key_name)
