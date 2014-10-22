@@ -15,37 +15,55 @@ options {
         /* Allow recursion on this server; used for caching nameservers. */
         recursion <%= scope['::bind::config::use_recursion'] %>;
 
+        /* Explicitly enable/disable DNSSEC, including validation and lookaside. *.
         dnssec-enable <%= scope['bind::config::dnssec_enable'] %>;
         dnssec-validation <%= scope['bind::config::dnssec_validation'] %>;
         dnssec-lookaside <%= scope['bind::config::dnssec_lookaside'] %>;
 
+        /* Explicitly set the ISC DLV key file. */
         bindkeys-file "<%= scope['bind::config::bind_keys_file'] %>";
+
+        /* Where to store the automatically maintained DNSSEC security roots. */
         managed-keys-directory "<%= scope['bind::config::managed_keys_path'] %>";
 
+        /* Check hostnames in resource records for RFC 952/1123 compliance. */
         check-names master <%= scope['bind::config::check_names_master'] %>;
         check-names slave <%= scope['bind::config::check_names_slave'] %>;
         check-names response <%= scope['bind::config::check_names_response'] %>;
 
+        /* IPv4/IPv6 addresses listen on. */
         listen-on port 53 { <%= scope.function_coalesce_array([ scope['bind::config::listen_ipv4'], '127.0.0.1' ]) %> };
         listen-on-v6 port 53 { <%= scope.function_coalesce_array([ scope['bind::config::listen_ipv6'], '::1' ]) %> };
 
     <%- if not scope['bind::config::forwarders'].empty? -%>
+        /* Global forwarding policy and global forwarders. */
         forward <%= scope['bind::config::forward_policy'] %>;
         forwarders { <%= scope.function_coalesce_array([ scope['bind::config::forwarders'] ]) %> };
     <%- end -%>
 
+        /* Allow the following addresses/keys to update our DNS records. */
         allow-update { <%= scope.function_coalesce_array([ scope['bind::config::allow_update'], 'none' ]) %> };
+
+        /* Allow zone transfers to servers matching these address or using these keys. */
         allow-transfer { <%= scope.function_coalesce_array([ scope['bind::config::allow_transfer'], 'none' ]) %> };
+
+        /* Allow the following addresses to send us NOTIFY messages. */
         allow-notify { <%= scope.function_coalesce_array([ scope['bind::config::allow_notify'], 'none' ]) %> };
+
+        /* Allow the following addresses to use this server as a recursor. */
         allow-recursion { <%= scope.function_coalesce_array([ scope['bind::config::allow_recursion'], 'none' ]) %> };
+
+        /* Allow the following addresses to use this server for queries. */
         allow-query { <%= scope.function_coalesce_array([ scope['bind::config::allow_query'], 'none' ]) %> };
 };
 
 controls {
+    /* Bind to the following address(es)/port(s) with the named key(s) to control this daemon. */
     inet 127.0.0.1 port 953 allow { 127.0.0.1; } keys { "<%= scope['bind::config::rndc_key_name'] %>"; };
 };
 
 logging {
+    /* By default, log everything to syslog. */
     category default {
         default_syslog;
     };
