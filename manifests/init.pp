@@ -20,11 +20,13 @@ class bind (
     fail('This module requires the use of Puppet v.3.6.0 or newer.')
   }
 
-  anchor { 'bind::begin': } ->
-  class { 'bind::package': } ->
-  class { 'bind::config': } ~>
-  class { 'bind::service': } ->
-  anchor { 'bind::end': }
+  contain '::bind::package'
+  contain '::bind::config'
+  contain '::bind::service'
+
+  Class['::bind::package'] ->
+  Class['::bind::config']  ~>
+  Class['::bind::service']
 
   create_resources('bind::resource::acl', $acls)
   create_resources('bind::resource::key', $keys)

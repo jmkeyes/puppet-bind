@@ -4,11 +4,9 @@ describe '::bind' do
   shared_examples "a Linux OS" do
     it { should compile.with_all_deps }
     it { should create_class('bind') }
-    it { should contain_anchor('bind::begin') }
-    it { should contain_bind__package.that_requires('Anchor[bind::begin]') }
+    it { should contain_bind__package }
     it { should contain_bind__config.that_requires('Class[bind::package]') }
     it { should contain_bind__service.that_subscribes_to('Class[bind::config]') }
-    it { should contain_anchor('bind::end').that_requires('Class[bind::service]') }
   end
 
   context "on Debian" do
