@@ -1,7 +1,7 @@
 ---
 bind::install::package_ensure: installed
-bind::service::ensure: running
-bind::service::enable: true
+bind::service::service_ensure: running
+bind::service::service_enable: true
 
 bind::config::purge_configs: true
 

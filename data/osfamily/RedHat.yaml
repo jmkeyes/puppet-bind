@@ -14,7 +14,5 @@ bind::config::config_local:    /etc/named.conf.local
 bind::config::config_options:  /etc/named.conf.options
 bind::config::config_controls: /etc/named.conf.controls
 
-bind::service::services:
-  - named
-
+bind::service::service_name: named
 bind::install::package_name: bind

@@ -12,18 +12,20 @@
 #
 
 class bind::service (
-  $services,
-  $ensure,
-  $enable
+  $service_name,
+  $service_ensure,
+  $service_enable
 ) {
-  validate_array($services)
-  validate_string($ensure)
-  validate_re($ensure, '^(running|stopped|[._0-9a-zA-Z:-]+)$')
-  validate_bool($enable)
+  validate_string($service_name)
 
-  service { $services:
-    ensure => $ensure,
-    enable => $enable
+  validate_string($service_ensure)
+  validate_re($service_ensure, '^(running|stopped|[._0-9a-zA-Z:-]+)$')
+
+  validate_bool($service_enable)
+
+  service { $service_name:
+    ensure => $service_ensure,
+    enable => $service_enable
   }
 }
 
