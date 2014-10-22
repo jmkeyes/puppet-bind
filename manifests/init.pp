@@ -16,6 +16,10 @@ class bind (
   $keys  = {},
   $zones = {}
 ) {
+  if versioncmp($::puppetversion, '3.6.0') < 0 {
+    fail('This module requires the use of Puppet v.3.6.0 or newer.')
+  }
+
   anchor { 'bind::begin': } ->
   class { 'bind::package': } ->
   class { 'bind::config': } ~>
