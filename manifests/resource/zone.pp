@@ -49,12 +49,12 @@ define bind::resource::zone (
     fail('Zone databases without backing source files are currently unsupported.')
   }
 
-  $database = "${bind::config::base_path}/db.${name}"
+  $database = "${bind::config::config_directory}/db.${name}"
 
   file { $database:
     ensure => $ensure,
-    owner  => $bind::config::owner,
-    group  => $bind::config::group,
+    owner  => $bind::config::daemon_owner,
+    group  => $bind::config::daemon_group,
     source => $source,
     mode   => '0644'
   }
@@ -62,7 +62,7 @@ define bind::resource::zone (
   concat::fragment { "bind::resource::zone::${name}::config":
     ensure  => $ensure,
     content => template("${module_name}/resource/zone-${type}.conf.erb"),
-    target  => $bind::config::config_local,
+    target  => $bind::config::local_config_path,
     require => File[$database]
   }
 }

@@ -1,163 +1,147 @@
 # == Class: bind::config
 
 class bind::config (
-  $owner,
-  $group,
-  $run_path,
-  $base_path,
-  $keys_path,
-  $config_main,
-  $config_local,
-  $config_options,
-  $rndc_key_path,
+  $daemon_owner,
+  $daemon_group,
+  $config_directory,
+  $working_directory,
+  $main_config_path,
+  $local_config_path,
+  $options_config_path,
+  $shared_keys_directory,
+  $managed_keys_directory,
+  $rndc_key_link,
   $bind_keys_file,
-  $managed_keys_path,
-  $dnssec_enable,
-  $dnssec_validation,
-  $dnssec_lookaside,
-  $purge_configuration,
-  $version,
-  $use_notify,
-  $use_recursion,
-  $use_default_zones,
-  $use_rfc1918_zones,
-  $listen_ipv4,
-  $listen_ipv6,
-  $allow_update,
-  $allow_update_forwarding,
-  $allow_transfer,
-  $allow_notify,
-  $allow_recursion,
-  $allow_query,
-  $forward_policy,
-  $forwarders,
 ) {
-  validate_string($owner)
-  validate_string($group)
+  private('Do not include ::bind::config directly!')
 
-  validate_absolute_path($run_path)
-  validate_absolute_path($base_path)
-  validate_absolute_path($keys_path)
+  validate_string($::bind::config::daemon_owner)
+  validate_string($::bind::config::daemon_group)
 
-  validate_absolute_path($config_main)
-  validate_absolute_path($config_local)
-  validate_absolute_path($config_options)
+  validate_absolute_path($::bind::config::working_directory)
+  validate_absolute_path($::bind::config::config_directory)
 
-  validate_absolute_path($rndc_key_path)
-  validate_absolute_path($bind_keys_file)
-  validate_absolute_path($managed_keys_path)
+  validate_absolute_path($::bind::config::shared_keys_directory)
+  validate_absolute_path($::bind::config::managed_keys_directory)
 
-  validate_string($dnssec_enable)
-  validate_re($dnssec_enable, '^(yes|no)$', "\$dnssec_enable must be one of 'yes' or 'no'!")
+  validate_absolute_path($::bind::config::main_config_path)
+  validate_absolute_path($::bind::config::local_config_path)
+  validate_absolute_path($::bind::config::options_config_path)
 
-  validate_string($dnssec_validation)
-  validate_re($dnssec_validation, '^(yes|no|auto)$', "\$dnssec_validation must be one of 'yes', 'no' or 'auto'!")
+  validate_absolute_path($::bind::config::rndc_key_link)
+  validate_absolute_path($::bind::config::bind_keys_file)
 
-  validate_string($dnssec_lookaside)
-  validate_re($dnssec_lookaside, '^(yes|no|auto)$', "\$dnssec_lookaside must be one of 'yes', 'no' or 'auto'!")
+  validate_string($::bind::dnssec_enable)
+  validate_re($::bind::dnssec_enable, '^(yes|no)$', "\$dnssec_enable must be one of 'yes' or 'no'!")
 
-  validate_bool($purge_configuration)
+  validate_string($::bind::dnssec_validation)
+  validate_re($::bind::dnssec_validation, '^(yes|no|auto)$', "\$dnssec_validation must be one of 'yes', 'no' or 'auto'!")
 
-  validate_string($version)
+  validate_string($::bind::dnssec_lookaside)
+  validate_re($::bind::dnssec_lookaside, '^(yes|no|auto)$', "\$dnssec_lookaside must be one of 'yes', 'no' or 'auto'!")
 
-  validate_string($use_notify)
-  validate_re($use_notify, '^(yes|no)$', "\$use_notify must be one of 'yes' or 'no'!")
+  validate_bool($::bind::purge_configuration)
 
-  validate_string($use_recursion)
-  validate_re($use_recursion, '^(yes|no)$', "\$use_recursion must be one of 'yes' or 'no'!")
+  validate_string($::bind::version)
 
-  validate_bool($use_default_zones)
-  validate_bool($use_rfc1918_zones)
+  validate_string($::bind::use_notify)
+  validate_re($::bind::use_notify, '^(yes|no)$', "\$use_notify must be one of 'yes' or 'no'!")
 
-  validate_array($listen_ipv4)
-  validate_array($listen_ipv6)
+  validate_string($::bind::use_recursion)
+  validate_re($::bind::use_recursion, '^(yes|no)$', "\$use_recursion must be one of 'yes' or 'no'!")
 
-  validate_array($allow_update)
-  validate_array($allow_update_forwarding)
-  validate_array($allow_transfer)
-  validate_array($allow_notify)
-  validate_array($allow_recursion)
-  validate_array($allow_query)
+  validate_bool($::bind::use_default_zones)
+  validate_bool($::bind::use_rfc1918_zones)
 
-  validate_string($forward_policy)
-  validate_re($forward_policy, '^(first|only)$', "\$forward_policy must be one of 'first' or 'only'!")
-  validate_array($forwarders)
+  validate_array($::bind::listen_ipv4)
+  validate_array($::bind::listen_ipv6)
 
-  file { $base_path:
+  validate_array($::bind::allow_update)
+  validate_array($::bind::allow_update_forwarding)
+  validate_array($::bind::allow_transfer)
+  validate_array($::bind::allow_notify)
+  validate_array($::bind::allow_recursion)
+  validate_array($::bind::allow_query)
+
+  validate_string($::bind::forward_policy)
+  validate_re($::bind::forward_policy, '^(first|only)$', "\$forward_policy must be one of 'first' or 'only'!")
+  validate_array($::bind::forwarders)
+
+  file { $::bind::config::config_directory:
     ensure  => directory,
-    recurse => $purge_configuration,
-    purge   => $purge_configuration,
+    recurse => $::bind::purge_configuration,
+    purge   => $::bind::purge_configuration,
     owner   => 'root',
-    group   => $group,
+    group   => $::bind::config::daemon_group,
     mode    => '0755'
   }
 
-  file { $run_path:
+  file { $::bind::config::working_directory:
     ensure  => directory,
-    recurse => $purge_configuration,
-    purge   => $purge_configuration,
+    recurse => $::bind::purge_configuration,
+    purge   => $::bind::purge_configuration,
     owner   => 'root',
-    group   => $group,
+    group   => $::bind::config::daemon_group,
     mode    => '0755'
   }
 
-  file { $keys_path:
+  file { $::bind::config::shared_keys_directory:
     ensure  => directory,
-    recurse => $purge_configuration,
-    purge   => $purge_configuration,
-    owner   => $owner,
-    group   => $group,
+    recurse => $::bind::purge_configuration,
+    purge   => $::bind::purge_configuration,
+    owner   => $::bind::config::daemon_owner,
+    group   => $::bind::config::daemon_group,
     mode    => '0755'
   }
 
-  file { $managed_keys_path:
+  file { $::bind::config::managed_keys_directory:
     ensure => directory,
-    owner  => $owner,
-    group  => $group,
+    owner  => $::bind::config::daemon_owner,
+    group  => $::bind::config::daemon_group,
     mode   => '0755'
   }
 
-  file { $config_main:
+  file { $::bind::config::main_config_path:
     ensure  => present,
     content => template("${module_name}/named.conf.erb"),
     owner   => 'root',
-    group   => $group,
+    group   => $::bind::config::daemon_group,
     mode    => '0644'
   }
 
-  file { $config_options:
+  file { $::bind::config::options_config_path:
     ensure  => present,
     content => template("${module_name}/named.conf.options.erb"),
     owner   => 'root',
-    group   => $group,
+    group   => $::bind::config::daemon_group,
     mode    => '0644'
   }
 
-  concat { $config_local:
+  concat { $::bind::config::local_config_path:
     ensure => present,
     owner  => 'root',
-    group  => $group,
+    group  => $::bind::config::daemon_group,
     mode   => '0644',
   }
 
-  file { $bind_keys_file:
+  file { $::bind::config::bind_keys_file:
     ensure => present,
     source => "puppet:///modules/${module_name}/bind.keys",
     owner  => 'root',
-    group  => $group,
+    group  => $::bind::config::daemon_group,
     mode   => '0644'
   }
 
-  bind::resource::key{ 'rndc-key':
+  bind::resource::key { 'rndc-key':
     ensure    => present,
     secret    => hmac('md5', $::fqdn, $::macaddress),
     algorithm => 'hmac-md5'
   }
 
-  file { $rndc_key_path:
+  file { $::bind::config::rndc_key_link:
     ensure  => link,
-    require => Bind::Resource::Key['rndc-key'],
-    target  => "${keys_path}/rndc-key.conf"
+    target  => "${::bind::config::shared_keys_directory}/rndc-key.conf",
+    require => Bind::Resource::Key['rndc-key']
   }
 
   bind::resource::zone { 'root':
@@ -167,7 +151,7 @@ class bind::config (
     zone   => '.'
   }
 
-  if $use_default_zones {
+  if $::bind::use_default_zones {
     bind::resource::zone { 'localhost.':
       ensure => present,
       source => "puppet:///modules/${module_name}/db.localhost",
@@ -193,7 +177,7 @@ class bind::config (
     }
   }
 
-  if $use_rfc1918_zones {
+  if $::bind::use_rfc1918_zones {
     $rfc1918_zones = [
       '10.in-addr.arpa.',
       '16.172.in-addr.arpa.',

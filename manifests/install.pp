@@ -4,13 +4,15 @@ class bind::install (
   $package_name,
   $package_ensure,
 ) {
-  validate_string($package_name)
+  private('Do not include ::bind::install directly!')
 
-  validate_string($package_ensure)
-  validate_re($package_ensure, '^(present|latest|nstalled|[._0-9a-zA-Z:-]+)$')
+  validate_string($bind::install::package_name)
 
-  package { $package_name:
-    ensure => $package_ensure
+  validate_string($bind::install::package_ensure)
+  validate_re($bind::install::package_ensure, '^(present|latest|nstalled|[._0-9a-zA-Z:-]+)$')
+
+  package { $bind::install::package_name:
+    ensure => $bind::install::package_ensure
   }
 }
 

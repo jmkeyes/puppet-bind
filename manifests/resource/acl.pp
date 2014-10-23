@@ -14,7 +14,7 @@ define bind::resource::acl (
   concat::fragment { "bind::resource::acl::${name}":
     ensure  => $ensure,
     content => template("${module_name}/resource/acl.conf.erb"),
-    target  => $bind::config::config_local
+    target  => $bind::config::local_config_path
   }
 }
 

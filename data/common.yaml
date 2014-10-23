@@ -3,29 +3,29 @@ bind::install::package_ensure: installed
 bind::service::service_ensure: running
 bind::service::service_enable: true
 
-bind::config::purge_configuration: true
+bind::purge_configuration: true
 
-bind::config::use_default_zones: true
-bind::config::use_rfc1918_zones: false
+bind::use_default_zones: true
+bind::use_rfc1918_zones: false
 
-bind::config::version:       'NOPE'
-bind::config::use_notify:    'yes'
-bind::config::use_recursion: 'yes'
+bind::version:       'NOPE'
+bind::use_notify:    'yes'
+bind::use_recursion: 'yes'
 
-bind::config::dnssec_enable:     'yes'
-bind::config::dnssec_validation: auto
-bind::config::dnssec_lookaside:  auto
+bind::dnssec_enable:     'yes'
+bind::dnssec_validation: auto
+bind::dnssec_lookaside:  auto
 
-bind::config::listen_ipv4: []
-bind::config::listen_ipv6: []
+bind::listen_ipv4: []
+bind::listen_ipv6: []
 
-bind::config::forward_policy:  first
-bind::config::forwarders:      []
+bind::forward_policy: first
+bind::forwarders:     []
 
-bind::config::allow_update:            []
-bind::config::allow_update_forwarding: []
+bind::allow_update:            []
+bind::allow_update_forwarding: []
 
-bind::config::allow_query:     []
-bind::config::allow_notify:    []
-bind::config::allow_transfer:  []
-bind::config::allow_recursion: []
+bind::allow_query:     []
+bind::allow_notify:    []
+bind::allow_transfer:  []
+bind::allow_recursion: []
