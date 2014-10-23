@@ -36,6 +36,7 @@ class bind (
   $forward_policy,
   $forwarders,
 ) {
+  # Fail fast if we're not using a new Puppet version.
   if versioncmp($::puppetversion, '3.6.0') < 0 {
     fail('This module requires the use of Puppet v.3.6.0 or newer.')
   }
