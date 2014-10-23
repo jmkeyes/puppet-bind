@@ -23,6 +23,9 @@ options {
         /* Make zone transfers more efficient by aggregating records. */
         transfer-format many-answers;
 
+        /* Don't allow zone transfers that take longer than 5 minutes. */
+        max-transfer-time-in 5;
+
         /* Allow slave notifications from this server; used for zone transfers. */
         notify <%= scope['::bind::use_notify'] %>;
 
