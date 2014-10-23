@@ -6,6 +6,9 @@ options {
         /* Explicitly set the ISC DLV key file. */
         bindkeys-file "<%= scope['::bind::config::bind_keys_file'] %>";
 
+        /* Where to store shared keys used in dynamic updates. */
+        key-directory "<%= scope['::bind::config::shared_keys_directory'] %>";
+
         /* Where to store the automatically maintained DNSSEC security roots. */
         managed-keys-directory "<%= scope['::bind::config::managed_keys_directory'] %>";
 
