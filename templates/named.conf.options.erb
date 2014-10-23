@@ -3,11 +3,12 @@ options {
         /* The working directory of the nameserver. */
         directory "<%= scope['bind::working_directory'] %>";
 
+        /* Don't give away any compromising information. */
+        version none;
+
         /* Conform to RFC1035. */
         auth-nxdomain no;
 
-        /* Version string to send to requesters. */
-        version "<%= scope['::bind::version'] %>";
 
         /* Allow slave notifications from this server; used for zone transfers. */
         notify <%= scope['::bind::use_notify'] %>;

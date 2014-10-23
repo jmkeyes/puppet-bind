@@ -16,7 +16,6 @@ class bind (
   $dnssec_validation,
   $dnssec_lookaside,
   $purge_configuration,
-  $version,
   $use_notify,
   $use_recursion,
   $use_default_zones,
