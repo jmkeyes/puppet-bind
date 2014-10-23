@@ -85,8 +85,23 @@ controls {
 };
 
 logging {
-    /* By default, log everything to syslog. */
-    category default {
-        default_syslog;
-    };
+        channel default_syslog {
+                /* Send most of the named messages to syslog. */
+                syslog local2;
+                severity debug;
+        };
+
+        category default { default_syslog; };
+        category general { default_syslog; };
+        category security { default_syslog; };
+        category config { default_syslog; };
+        category resolver { default_syslog; };
+        category xfer-in { default_syslog; };
+        category xfer-out { default_syslog; };
+        category notify { default_syslog; };
+        category client { default_syslog; };
+        category network { default_syslog; };
+        category update { default_syslog; };
+        category queries { default_syslog; };
+        category lame-servers { default_syslog; };
 };
