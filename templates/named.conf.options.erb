@@ -80,8 +80,8 @@ options {
 };
 
 controls {
-    /* Bind to the following address(es)/port(s) with the named key(s) to control this daemon. */
-    inet 127.0.0.1 port 953 allow { 127.0.0.1; } keys { "<%= scope['bind::rndc_key_name'] %>"; };
+        /* Bind to the following address(es)/port(s) with the named key(s) to control this daemon. */
+        inet 127.0.0.1 port 953 allow { 127.0.0.1; } keys { "rndc-key"; };
 };
 
 logging {
