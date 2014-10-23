@@ -31,6 +31,9 @@ class bind::config (
   validate_absolute_path($::bind::config::rndc_key_link)
   validate_absolute_path($::bind::config::bind_keys_file)
 
+  $defined_acls  = hiera_hash('bind::acls', {})
+  $defined_keys  = hiera_hash('bind::keys', {})
+  $defined_zones = hiera_hash('bind::zones', {})
 
   file { $::bind::config::config_directory:
     ensure  => directory,
@@ -170,4 +173,8 @@ class bind::config (
       type   => 'master'
     }
   }
+
+  create_resources('bind::resource::acl', $defined_acls)
+  create_resources('bind::resource::key', $defined_keys)
+  create_resources('bind::resource::zone', $defined_zones)
 }

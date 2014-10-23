@@ -92,13 +92,5 @@ class bind (
   Class['::bind::install'] ->
   Class['::bind::config']  ~>
   Class['::bind::service']
-
-  $acls  = hiera_hash('bind::acls', {})
-  $keys  = hiera_hash('bind::keys', {})
-  $zones = hiera_hash('bind::zones', {})
-
-  create_resources('bind::resource::acl', $acls)
-  create_resources('bind::resource::key', $keys)
-  create_resources('bind::resource::zone', $zones)
 }
 
