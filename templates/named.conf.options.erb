@@ -27,6 +27,16 @@ options {
         /* Where to store the automatically maintained DNSSEC security roots. */
         managed-keys-directory "<%= scope['bind::managed_keys_directory'] %>";
 
+    <%- if scope['::bind::check_names_master'] != 'none' -%>
+        check-names master <%= scope['::bind::check_names_master'] %>;
+    <%- end -%>
+    <%- if scope['::bind::check_names_slave'] != 'none' -%>
+        check-names slave <%= scope['::bind::check_names_slave'] %>;
+    <%- end -%>
+    <%- if scope['::bind::check_names_response'] != 'none' -%>
+        check-names response <%= scope['::bind::check_names_response'] %>;
+    <%- end -%>
+
         /* IPv4/IPv6 addresses listen on. */
         listen-on port 53 { <%= scope.function_coalesce_array([ scope['bind::listen_ipv4'], '127.0.0.1' ]) %> };
         listen-on-v6 port 53 { <%= scope.function_coalesce_array([ scope['bind::listen_ipv6'], '::1' ]) %> };

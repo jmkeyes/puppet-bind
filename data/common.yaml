@@ -15,6 +15,10 @@ bind::dnssec_enable:     'yes'
 bind::dnssec_validation: auto
 bind::dnssec_lookaside:  auto
 
+bind::check_names_master:   none
+bind::check_names_slave:    none
+bind::check_names_response: none
+
 bind::listen_ipv4: []
 bind::listen_ipv6: []
 

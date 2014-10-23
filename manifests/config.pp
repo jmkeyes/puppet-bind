@@ -42,6 +42,15 @@ class bind::config (
 
   validate_bool($::bind::purge_configuration)
 
+  validate_string($::bind::check_names_master)
+  validate_re($::bind::check_names_master, '^(none|warn|fail|ignore)$', "\$check_names_master must be one of 'none', 'warn', 'fail', or 'ignore'!")
+
+  validate_string($::bind::check_names_slave)
+  validate_re($::bind::check_names_slave, '^(none|warn|fail|ignore)$', "\$check_names_slave must be one of 'none', 'warn', 'fail', or 'ignore'!")
+
+  validate_string($::bind::check_names_response)
+  validate_re($::bind::check_names_response, '^(none|warn|fail|ignore)$', "\$check_names_response must be one of 'none', 'warn', 'fail', or 'ignore'!")
+
   validate_string($::bind::version)
 
   validate_string($::bind::use_notify)
