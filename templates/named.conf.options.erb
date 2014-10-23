@@ -20,6 +20,8 @@ options {
         /* Conform to RFC1035. */
         auth-nxdomain no;
 
+        /* Make zone transfers more efficient by aggregating records. */
+        transfer-format many-answers;
 
         /* Allow slave notifications from this server; used for zone transfers. */
         notify <%= scope['::bind::use_notify'] %>;
