@@ -5,11 +5,11 @@ class bind::config (
   $daemon_group,
   $config_directory,
   $working_directory,
+  $shared_keys_directory,
+  $managed_keys_directory,
   $main_config_path,
   $local_config_path,
   $options_config_path,
-  $shared_keys_directory,
-  $managed_keys_directory,
   $rndc_key_link,
   $bind_keys_file,
 ) {

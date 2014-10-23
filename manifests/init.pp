@@ -12,10 +12,10 @@
 #
 
 class bind (
+  $purge_configuration,
   $dnssec_enable,
   $dnssec_validation,
   $dnssec_lookaside,
-  $purge_configuration,
   $check_names_master,
   $check_names_slave,
   $check_names_response,
