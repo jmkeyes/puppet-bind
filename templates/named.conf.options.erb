@@ -41,6 +41,15 @@ options {
         listen-on port 53 { <%= scope.function_coalesce_array([ scope['bind::listen_ipv4'], '127.0.0.1' ]) %> };
         listen-on-v6 port 53 { <%= scope.function_coalesce_array([ scope['bind::listen_ipv6'], '::1' ]) %> };
 
+    <%- if not scope['::bind::avoid_v4_udp_ports'].empty? -%>
+        /* Avoid using the following UDP ports for IPv4; used to get around firewalls. */
+        avoid-v4-udp-ports { <%= scope.function_coalesce_array([ scope['::bind::avoid_v4_udp_ports'] ]) %> };
+    <%- end -%>
+    <%- if not scope['::bind::avoid_v6_udp_ports'].empty? -%>
+        /* Avoid using the following UDP ports for IPv6; used to get around firewalls. */
+        avoid-v6-udp-ports { <%= scope.function_coalesce_array([ scope['::bind::avoid_v6_udp_ports'] ]) %> };
+    <%- end -%>
+
     <%- if not scope['bind::forwarders'].empty? -%>
         /* Global forwarding policy and global forwarders. */
         forward <%= scope['bind::forward_policy'] %>;

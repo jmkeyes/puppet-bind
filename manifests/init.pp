@@ -25,6 +25,8 @@ class bind (
   $use_rfc1918_zones,
   $listen_ipv4,
   $listen_ipv6,
+  $avoid_v4_udp_ports,
+  $avoid_v6_udp_ports,
   $allow_update,
   $allow_update_forwarding,
   $allow_transfer,

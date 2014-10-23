@@ -22,6 +22,9 @@ bind::check_names_response: none
 bind::listen_ipv4: []
 bind::listen_ipv6: []
 
+bind::avoid_v4_udp_ports: []
+bind::avoid_v6_udp_ports: []
+
 bind::forward_policy: first
 bind::forwarders:     []
 
