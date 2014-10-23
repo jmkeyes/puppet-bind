@@ -1,7 +1,7 @@
 /* This file is managed by Puppet. Any changes will be overridden. */
 options {
         /* The working directory of the nameserver. */
-        directory "<%= scope['bind::working_directory'] %>";
+        directory "<%= scope['::bind::config::working_directory'] %>";
 
         /* Don't give away any compromising information. */
         version none;
@@ -19,9 +19,9 @@ options {
         recursion <%= scope['::bind::use_recursion'] %>;
 
         /* Explicitly enable/disable DNSSEC, including validation and lookaside. *.
-        dnssec-enable <%= scope['bind::dnssec_enable'] %>;
-        dnssec-validation <%= scope['bind::dnssec_validation'] %>;
-        dnssec-lookaside <%= scope['bind::dnssec_lookaside'] %>;
+        dnssec-enable <%= scope['::bind::dnssec_enable'] %>;
+        dnssec-validation <%= scope['::bind::dnssec_validation'] %>;
+        dnssec-lookaside <%= scope['::bind::dnssec_lookaside'] %>;
 
         /* Explicitly set the ISC DLV key file. */
         bindkeys-file "<%= scope['bind::bind_keys_file'] %>";
@@ -40,8 +40,8 @@ options {
     <%- end -%>
 
         /* IPv4/IPv6 addresses listen on. */
-        listen-on port 53 { <%= scope.function_coalesce_array([ scope['bind::listen_ipv4'], '127.0.0.1' ]) %> };
-        listen-on-v6 port 53 { <%= scope.function_coalesce_array([ scope['bind::listen_ipv6'], '::1' ]) %> };
+        listen-on port 53 { <%= scope.function_coalesce_array([ scope['::bind::listen_ipv4'], '127.0.0.1' ]) %> };
+        listen-on-v6 port 53 { <%= scope.function_coalesce_array([ scope['::bind::listen_ipv6'], '::1' ]) %> };
 
     <%- if not scope['::bind::avoid_v4_udp_ports'].empty? -%>
         /* Avoid using the following UDP ports for IPv4; used to get around firewalls. */
@@ -52,31 +52,31 @@ options {
         avoid-v6-udp-ports { <%= scope.function_coalesce_array([ scope['::bind::avoid_v6_udp_ports'] ]) %> };
     <%- end -%>
 
-    <%- if not scope['bind::forwarders'].empty? -%>
+    <%- if not scope['::bind::forwarders'].empty? -%>
         /* Global forwarding policy and global forwarders. */
-        forward <%= scope['bind::forward_policy'] %>;
-        forwarders { <%= scope.function_coalesce_array([ scope['bind::forwarders'] ]) %> };
+        forward <%= scope['::bind::forward_policy'] %>;
+        forwarders { <%= scope.function_coalesce_array([ scope['::bind::forwarders'] ]) %> };
     <%- end -%>
 
         /* Allow the following addresses/keys to update our DNS records. */
-        allow-update { <%= scope.function_coalesce_array([ scope['bind::allow_update'], 'none' ]) %> };
+        allow-update { <%= scope.function_coalesce_array([ scope['::bind::allow_update'], 'none' ]) %> };
 
-    <%- if not scope['bind::allow_update_forwarding'].empty? -%>
+    <%- if not scope['::bind::allow_update_forwarding'].empty? -%>
         /* Allow the following addresses/keys to submit dynamic updates to a slave for forwarding to a master. */
-        allow-update-forwarding { <%= scope.function_coalesce_array([ scope['bind::allow_update_forwarding'], 'none' ]) %> };
+        allow-update-forwarding { <%= scope.function_coalesce_array([ scope['::bind::allow_update_forwarding'], 'none' ]) %> };
     <%- end -%>
 
         /* Allow zone transfers to servers matching these address or using these keys. */
-        allow-transfer { <%= scope.function_coalesce_array([ scope['bind::allow_transfer'], 'none' ]) %> };
+        allow-transfer { <%= scope.function_coalesce_array([ scope['::bind::allow_transfer'], 'none' ]) %> };
 
         /* Allow the following addresses to send us NOTIFY messages. */
-        allow-notify { <%= scope.function_coalesce_array([ scope['bind::allow_notify'], 'none' ]) %> };
+        allow-notify { <%= scope.function_coalesce_array([ scope['::bind::allow_notify'], 'none' ]) %> };
 
         /* Allow the following addresses to use this server as a recursor. */
-        allow-recursion { <%= scope.function_coalesce_array([ scope['bind::allow_recursion'], 'none' ]) %> };
+        allow-recursion { <%= scope.function_coalesce_array([ scope['::bind::allow_recursion'], 'none' ]) %> };
 
         /* Allow the following addresses to use this server for queries. */
-        allow-query { <%= scope.function_coalesce_array([ scope['bind::allow_query'], 'none' ]) %> };
+        allow-query { <%= scope.function_coalesce_array([ scope['::bind::allow_query'], 'none' ]) %> };
 };
 
 controls {
