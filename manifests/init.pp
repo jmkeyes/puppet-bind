@@ -39,6 +39,7 @@ class bind (
   $allow_notify,
   $allow_recursion,
   $allow_query,
+  $allow_query_cache,
   $forward_policy,
   $forwarders,
 ) {
@@ -86,6 +87,7 @@ class bind (
   validate_array($::bind::allow_notify)
   validate_array($::bind::allow_recursion)
   validate_array($::bind::allow_query)
+  validate_array($::bind::allow_query_cache)
 
   validate_string($::bind::forward_policy)
   validate_re($::bind::forward_policy, '^(first|only)$', "\$forward_policy must be one of 'first' or 'only'!")

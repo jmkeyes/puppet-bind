@@ -85,6 +85,9 @@ options {
 
         /* Allow the following addresses to use this server for queries. */
         allow-query { <%= scope.function_coalesce_array([ scope['::bind::allow_query'], 'none' ]) %> };
+
+        /* Allow the following address to use the server's cached results. */
+        allow-query-cache { <%= scope.function_coalesce_array([ scope['::bind::allow_query_cache'], 'none' ]) %> };
 };
 
 controls {

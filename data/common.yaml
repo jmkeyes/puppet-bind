@@ -32,7 +32,9 @@ bind::forwarders:     []
 bind::allow_update:            []
 bind::allow_update_forwarding: []
 
-bind::allow_query:     []
 bind::allow_notify:    []
 bind::allow_transfer:  []
 bind::allow_recursion: []
+
+bind::allow_query:       []
+bind::allow_query_cache: []
