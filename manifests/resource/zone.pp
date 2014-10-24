@@ -12,6 +12,7 @@ define bind::resource::zone (
   $masters        = undef,
   $forwarders     = undef,
   $forward_policy = undef,
+  $nameservers    = [ $::fqdn ],
 ) {
   validate_string($name)
   validate_string($zone)
@@ -44,6 +45,8 @@ define bind::resource::zone (
 
     validate_array($forwarders)
   }
+
+  validate_array($nameservers)
 
   if $source == undef {
     fail('Zone databases without backing source files are currently unsupported.')
