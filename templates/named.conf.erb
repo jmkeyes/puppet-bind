@@ -1,4 +1,4 @@
 /* This file managed by Puppet. Any changes will be overridden. */
 
-include "<%= scope['bind::local_config_path'] %>";
-include "<%= scope['bind::options_config_path'] %>";
+include "<%= scope['bind::config::local_config_path'] %>";
+include "<%= scope['bind::config::options_config_path'] %>";
