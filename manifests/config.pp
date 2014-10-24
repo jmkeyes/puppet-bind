@@ -118,7 +118,7 @@ class bind::config (
     ensure => present,
     source => "puppet:///modules/${module_name}/db.root",
     type   => 'hint',
-    zone   => '.'
+    origin => '.'
   }
 
   if $::bind::use_default_zones {

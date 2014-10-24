@@ -5,7 +5,7 @@ define bind::resource::zone (
   $type           = undef,
   $source         = undef,
   $overwrite      = false,
-  $zone           = $name,
+  $origin         = $name,
   $allow_update   = undef,
   $allow_notify   = undef,
   $allow_transfer = undef,
