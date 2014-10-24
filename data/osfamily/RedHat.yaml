@@ -1,6 +1,6 @@
 ---
 bind::package_name: bind
-bind::service::service_name: named
+bind::service_name: named
 
 bind::config::daemon_owner: named
 bind::config::daemon_group: named
