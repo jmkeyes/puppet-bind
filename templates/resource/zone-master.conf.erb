@@ -2,10 +2,10 @@ zone "<%= @zone %>" {
     type master;
     file "<%= @database %>";
     <%- if @allow_transfer -%>
-    allow-transfer { <%= scope.function_coalesce_array([ @allow_transfer, 'none' ]) %> }
+    allow-transfer { <%= scope.function_coalesce_array([ @allow_transfer, 'none' ]) %> };
     <%- end -%>
     <%- if @allow_update -%>
-    allow-update { <%= scope.function_coalesce_array([ @allow_update, 'none' ]) %> }
+    allow-update { <%= scope.function_coalesce_array([ @allow_update, 'none' ]) %> };
     <%- end -%>
     <%- if @forward_policy and @forwarders -%>
     forward <%= @forward_policy %>;
