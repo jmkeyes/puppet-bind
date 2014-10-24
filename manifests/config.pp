@@ -122,25 +122,25 @@ class bind::config (
   }
 
   if $::bind::use_default_zones {
-    bind::resource::zone { 'localhost.':
+    bind::resource::zone { 'localhost':
       ensure => present,
       source => "puppet:///modules/${module_name}/db.localhost",
       type   => 'master'
     }
 
-    bind::resource::zone { '0.in-addr.arpa.':
+    bind::resource::zone { '0.in-addr.arpa':
       ensure => present,
       source => "puppet:///modules/${module_name}/db.0",
       type   => 'master'
     }
 
-    bind::resource::zone { '127.in-addr.arpa.':
+    bind::resource::zone { '127.in-addr.arpa':
       ensure => present,
       source => "puppet:///modules/${module_name}/db.127",
       type   => 'master'
     }
 
-    bind::resource::zone { '255.in-addr.arpa.':
+    bind::resource::zone { '255.in-addr.arpa':
       ensure => present,
       source => "puppet:///modules/${module_name}/db.255",
       type   => 'master'
@@ -149,24 +149,24 @@ class bind::config (
 
   if $::bind::use_rfc1918_zones {
     $rfc1918_zones = [
-      '10.in-addr.arpa.',
-      '16.172.in-addr.arpa.',
-      '17.172.in-addr.arpa.',
-      '18.172.in-addr.arpa.',
-      '19.172.in-addr.arpa.',
-      '20.172.in-addr.arpa.',
-      '21.172.in-addr.arpa.',
-      '22.172.in-addr.arpa.',
-      '23.172.in-addr.arpa.',
-      '24.172.in-addr.arpa.',
-      '25.172.in-addr.arpa.',
-      '26.172.in-addr.arpa.',
-      '27.172.in-addr.arpa.',
-      '28.172.in-addr.arpa.',
-      '29.172.in-addr.arpa.',
-      '30.172.in-addr.arpa.',
-      '31.172.in-addr.arpa.',
-      '168.192.in-addr.arpa.',
+      '10.in-addr.arpa',
+      '16.172.in-addr.arpa',
+      '17.172.in-addr.arpa',
+      '18.172.in-addr.arpa',
+      '19.172.in-addr.arpa',
+      '20.172.in-addr.arpa',
+      '21.172.in-addr.arpa',
+      '22.172.in-addr.arpa',
+      '23.172.in-addr.arpa',
+      '24.172.in-addr.arpa',
+      '25.172.in-addr.arpa',
+      '26.172.in-addr.arpa',
+      '27.172.in-addr.arpa',
+      '28.172.in-addr.arpa',
+      '29.172.in-addr.arpa',
+      '30.172.in-addr.arpa',
+      '31.172.in-addr.arpa',
+      '168.192.in-addr.arpa',
     ]
 
     bind::resource::zone { $rfc1918_zones:
