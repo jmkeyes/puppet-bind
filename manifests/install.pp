@@ -1,20 +1,17 @@
 # == Class: bind::install
 
-class bind::install (
-  $package_name,
-  $package_ensure,
-) {
+class bind::install {
   if $caller_module_name != $module_name {
     fail('Do not include ::bind::install directly!')
   }
 
-  validate_string($::bind::install::package_name)
+  validate_string($::bind::package_name)
 
-  validate_string($::bind::install::package_ensure)
-  validate_re($::bind::install::package_ensure, '^(present|latest|nstalled|[._0-9a-zA-Z:-]+)$')
+  validate_string($::bind::package_ensure)
+  validate_re($::bind::package_ensure, '^(present|latest|nstalled|[._0-9a-zA-Z:-]+)$')
 
-  package { $::bind::install::package_name:
-    ensure => $::bind::install::package_ensure
+  package { $::bind::package_name:
+    ensure => $::bind::package_ensure
   }
 }
 

@@ -12,6 +12,8 @@
 #
 
 class bind (
+  $package_name,
+  $package_ensure,
   $purge_configuration,
   $dnssec_enable,
   $dnssec_validation,

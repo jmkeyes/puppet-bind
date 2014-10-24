@@ -1,5 +1,5 @@
 ---
-bind::install::package_ensure: installed
+bind::package_ensure: installed
 bind::service::service_ensure: running
 bind::service::service_enable: true
 
