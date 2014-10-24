@@ -13,7 +13,9 @@ class bind::config (
   $rndc_key_link,
   $bind_keys_file,
 ) {
-  private('Do not include ::bind::config directly!')
+  if $caller_module_name != $module_name {
+    fail('Do not include ::bind::config directly!')
+  }
 
   validate_string($::bind::config::daemon_owner)
   validate_string($::bind::config::daemon_group)

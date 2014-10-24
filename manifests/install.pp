@@ -4,7 +4,9 @@ class bind::install (
   $package_name,
   $package_ensure,
 ) {
-  private('Do not include ::bind::install directly!')
+  if $caller_module_name != $module_name {
+    fail('Do not include ::bind::install directly!')
+  }
 
   validate_string($bind::install::package_name)
 
