@@ -17,6 +17,7 @@ class bind (
   $service_name,
   $service_ensure,
   $service_enable,
+  $service_manage,
   $purge_configuration,
   $dnssec_enable,
   $dnssec_validation,

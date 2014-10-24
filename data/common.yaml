@@ -2,6 +2,7 @@
 bind::package_ensure: installed
 bind::service_ensure: running
 bind::service_enable: true
+bind::service_manage: true
 
 bind::purge_configuration: true
 

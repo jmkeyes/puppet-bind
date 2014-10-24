@@ -12,9 +12,13 @@ class bind::service {
 
   validate_bool($::bind::service_enable)
 
-  service { $::bind::service_name:
-    ensure => $::bind::service_ensure,
-    enable => $::bind::service_enable
+  validate_bool($::bind::service_manage)
+
+  if $::bind::service_manage {
+    service { $::bind::service_name:
+      ensure => $::bind::service_ensure,
+      enable => $::bind::service_enable
+    }
   }
 }
 
