@@ -5,13 +5,14 @@ class bind::config (
   $daemon_group,
   $config_directory,
   $working_directory,
-  $shared_keys_directory,
-  $managed_keys_directory,
+  $keys_directory,
+  $bind_keys_file,
   $main_config_path,
   $local_config_path,
   $options_config_path,
-  $rndc_key_link,
-  $bind_keys_file,
+  $rndc_key_path,
+  $rndc_config_path,
+  $zone_database_pattern,
 ) {
   if $caller_module_name != $module_name {
     fail('Do not include ::bind::config directly!')
@@ -23,24 +24,24 @@ class bind::config (
   validate_absolute_path($::bind::config::working_directory)
   validate_absolute_path($::bind::config::config_directory)
 
-  validate_absolute_path($::bind::config::shared_keys_directory)
-  validate_absolute_path($::bind::config::managed_keys_directory)
+  validate_absolute_path($::bind::config::keys_directory)
+  validate_absolute_path($::bind::config::bind_keys_file)
 
   validate_absolute_path($::bind::config::main_config_path)
   validate_absolute_path($::bind::config::local_config_path)
   validate_absolute_path($::bind::config::options_config_path)
 
-  validate_absolute_path($::bind::config::rndc_key_link)
-  validate_absolute_path($::bind::config::bind_keys_file)
+  validate_absolute_path($::bind::config::rndc_key_path)
+  validate_absolute_path($::bind::config::rndc_config_path)
 
-  $defined_acls  = hiera_hash('bind::acls', {})
-  $defined_keys  = hiera_hash('bind::keys', {})
-  $defined_zones = hiera_hash('bind::zones', {})
+  validate_string($::bind::config::zone_database_pattern)
 
+  ### Manage the BIND system group.
   group { $::bind::config::daemon_group:
     ensure => present
   }
 
+  ### Manage the BIND system user.
   user { $::bind::config::daemon_owner:
     ensure   => present,
     home     => $::bind::config::working_directory,
@@ -49,83 +50,136 @@ class bind::config (
     password => '*'
   }
 
-  file { $::bind::config::config_directory:
-    ensure  => directory,
-    recurse => $::bind::purge_configuration,
-    purge   => $::bind::purge_configuration,
-    owner   => 'root',
-    group   => $::bind::config::daemon_group,
-    mode    => '0755'
+  ### Create necessary directories.
+  file {
+    $::bind::config::config_directory:
+      ensure => directory,
+      group   => $::bind::config::daemon_group,
+      purge   => $::bind::purge_configuration,
+      recurse => $::bind::purge_configuration,
+      force   => $::bind::purge_configuration,
+      owner  => 'root',
+      mode   => '0750';
+    $::bind::config::working_directory:
+      ensure => directory,
+      group   => $::bind::config::daemon_group,
+      purge   => $::bind::purge_configuration,
+      recurse => $::bind::purge_configuration,
+      force   => $::bind::purge_configuration,
+      owner  => 'root',
+      mode   => '0750';
+    $::bind::config::keys_directory:
+      ensure => directory,
+      group   => $::bind::config::daemon_group,
+      purge   => $::bind::purge_configuration,
+      recurse => $::bind::purge_configuration,
+      force   => $::bind::purge_configuration,
+      mode   => '0750';
   }
 
-  file { $::bind::config::working_directory:
-    ensure  => directory,
-    recurse => $::bind::purge_configuration,
-    purge   => $::bind::purge_configuration,
-    owner   => 'root',
-    group   => $::bind::config::daemon_group,
-    mode    => '0755'
-  }
-
-  file { $::bind::config::shared_keys_directory:
-    ensure  => directory,
-    recurse => $::bind::purge_configuration,
-    purge   => $::bind::purge_configuration,
-    owner   => $::bind::config::daemon_owner,
-    group   => $::bind::config::daemon_group,
-    mode    => '0755'
-  }
-
-  file { $::bind::config::managed_keys_directory:
-    ensure => directory,
-    owner  => $::bind::config::daemon_owner,
-    group  => $::bind::config::daemon_group,
-    mode   => '0755'
-  }
-
+  ### Create named.conf configuration file.
   file { $::bind::config::main_config_path:
-    ensure  => present,
-    content => template("${module_name}/named.conf.erb"),
-    owner   => 'root',
-    group   => $::bind::config::daemon_group,
-    mode    => '0644'
+    ensure       => file,
+    content      => template("${module_name}/named.conf.erb"),
+    validate_cmd => '/usr/sbin/named-checkconf %',
+    owner        => $::bind::config::daemon_owner,
+    group        => $::bind::config::daemon_group,
+    purge        => $::bind::purge_configuration,
+    recurse      => $::bind::purge_configuration,
+    force        => $::bind::purge_configuration,
+    mode         => '0640',
+    require      => [
+      File[$::bind::config::options_config_path],
+      Concat[$::bind::config::local_config_path]
+    ]
   }
 
+  ### Create named.conf.options configuration file.
   file { $::bind::config::options_config_path:
-    ensure  => present,
-    content => template("${module_name}/named.conf.options.erb"),
-    owner   => 'root',
-    group   => $::bind::config::daemon_group,
-    mode    => '0644'
+    ensure       => file,
+    content      => template("${module_name}/named.conf.options.erb"),
+    before       => File[$::bind::config::main_config_path],
+    validate_cmd => '/usr/sbin/named-checkconf %',
+    owner        => $::bind::config::daemon_owner,
+    group        => $::bind::config::daemon_group,
+    purge        => $::bind::purge_configuration,
+    recurse      => $::bind::purge_configuration,
+    force        => $::bind::purge_configuration,
+    mode         => '0640'
   }
 
+  ### Create named.conf.local configuration file.
   concat { $::bind::config::local_config_path:
     ensure => present,
-    owner  => 'root',
+    before => File[$::bind::config::main_config_path],
+    notify => Exec['validate_named_conf_local'],
+    owner  => $::bind::config::daemon_owner,
     group  => $::bind::config::daemon_group,
-    mode   => '0644',
+    mode   => '0640',
   }
 
+  exec { 'validate_named_conf_local':
+    command     => "/usr/sbin/named-checkconf '${::bind::config::local_config_path}'",
+    refreshonly => true
+  }
+
+  file {
+    "${::bind::config::working_directory}/managed-keys.bind":
+      ensure  => file,
+      owner   => $::bind::config::daemon_owner,
+      group   => $::bind::config::daemon_group,
+      mode    => '0644',
+      replace => false;
+    "${::bind::config::working_directory}/managed-keys.bind.jnl":
+      ensure  => file,
+      owner   => $::bind::config::daemon_owner,
+      group   => $::bind::config::daemon_group,
+      mode    => '0644',
+      replace => false;
+  }
+
+  ### Ensure we have the DNSSEC anchors available.
   file { $::bind::config::bind_keys_file:
-    ensure => present,
+    ensure => file,
     source => "puppet:///modules/${module_name}/bind.keys",
-    owner  => 'root',
+    owner  => $::bind::config::daemon_owner,
     group  => $::bind::config::daemon_group,
     mode   => '0644'
   }
 
-  bind::resource::key { 'rndc-key':
-    ensure    => present,
-    secret    => hmac('md5', $::fqdn, $::macaddress),
-    algorithm => 'hmac-md5'
+  ### Using an rndc config file and a key will create weirdness.
+  if $::bind::use_rndc_config and $::bind::use_rndc_key {
+    warning('Using rndc configuration file will override rndc key file!')
   }
 
-  file { $::bind::config::rndc_key_link:
-    ensure  => link,
-    target  => "${::bind::config::shared_keys_directory}/rndc-key.conf",
-    require => Bind::Resource::Key['rndc-key']
+  if $::bind::use_rndc_key {
+    ### Ensure we have an rndc key available.
+    bind::resource::key { 'rndc-key':
+      ensure    => present,
+      secret    => $::bind::rndc_key_secret,
+      algorithm => 'hmac-md5'
+    }
+
+    ### Ensure a symlink exists to the rndc key we created.
+    file { $::bind::config::rndc_key_path:
+      ensure  => link,
+      target  => "${::bind::config::keys_directory}/rndc-key.conf",
+      require => Bind::Resource::Key['rndc-key']
+    }
   }
 
+  if $::bind::use_rndc_config {
+    ### Ensure the rndc configuration file has been created.
+    file { $::bind::config::rndc_config_path:
+      ensure  => file,
+      content => template("${module_name}/rndc.conf.erb"),
+      owner   => $::bind::config::daemon_owner,
+      group   => $::bind::config::daemon_group,
+      mode    => '0600'
+    }
+  }
+
+  ### Create the root zone hints.
   bind::resource::zone { 'root':
     ensure => present,
     source => "puppet:///modules/${module_name}/db.root",
@@ -133,30 +187,29 @@ class bind::config (
     origin => '.'
   }
 
-  if $::bind::use_default_zones {
-    bind::resource::zone { 'localhost':
-      ensure => present,
-      source => "puppet:///modules/${module_name}/db.localhost",
-      type   => 'master'
-    }
+  ### Create a master zone for localhost address.
+  bind::resource::zone { 'localhost':
+    ensure => present,
+    source => "puppet:///modules/${module_name}/db.localhost",
+    type   => 'master'
+  }
 
-    bind::resource::zone { '0.in-addr.arpa':
-      ensure => present,
-      source => "puppet:///modules/${module_name}/db.0",
-      type   => 'master'
-    }
+  bind::resource::zone { '0.in-addr.arpa':
+    ensure => present,
+    source => "puppet:///modules/${module_name}/db.broadcast",
+    type   => 'master'
+  }
 
-    bind::resource::zone { '127.in-addr.arpa':
-      ensure => present,
-      source => "puppet:///modules/${module_name}/db.127",
-      type   => 'master'
-    }
+  bind::resource::zone { '127.in-addr.arpa':
+    ensure => present,
+    source => "puppet:///modules/${module_name}/db.localhost",
+    type   => 'master'
+  }
 
-    bind::resource::zone { '255.in-addr.arpa':
-      ensure => present,
-      source => "puppet:///modules/${module_name}/db.255",
-      type   => 'master'
-    }
+  bind::resource::zone { '255.in-addr.arpa':
+    ensure => present,
+    source => "puppet:///modules/${module_name}/db.broadcast",
+    type   => 'master'
   }
 
   if $::bind::use_rfc1918_zones {
@@ -188,7 +241,7 @@ class bind::config (
     }
   }
 
-  create_resources('bind::resource::acl', $defined_acls)
-  create_resources('bind::resource::key', $defined_keys)
-  create_resources('bind::resource::zone', $defined_zones)
+  create_resources('bind::resource::acl',  hiera_hash('bind::acls',  {}))
+  create_resources('bind::resource::key',  hiera_hash('bind::keys',  {}))
+  create_resources('bind::resource::zone', hiera_hash('bind::zones', {}))
 }

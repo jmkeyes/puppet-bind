@@ -8,12 +8,14 @@ bind::config::daemon_group: named
 bind::config::config_directory:  /etc/named
 bind::config::working_directory: /var/named
 
-bind::config::shared_keys_directory:  /etc/named.keys.d
-bind::config::managed_keys_directory: /var/named/dynamic
+bind::config::keys_directory: /etc/named.keys.d
+bind::config::bind_keys_file: /etc/named.iscdlv.key
 
 bind::config::main_config_path:    /etc/named.conf
 bind::config::local_config_path:   /etc/named.conf.local
 bind::config::options_config_path: /etc/named.conf.options
 
-bind::config::rndc_key_link:  /etc/rndc.key
-bind::config::bind_keys_file: /etc/named.iscdlv.key
+bind::config::rndc_key_path:    /etc/rndc.key
+bind::config::rndc_config_path: /etc/rndc.conf
+
+bind::config::zone_database_pattern: /var/named/%s.db

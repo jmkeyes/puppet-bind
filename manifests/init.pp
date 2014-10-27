@@ -19,6 +19,9 @@ class bind (
   $service_enable,
   $service_manage,
   $purge_configuration,
+  $use_rndc_key,
+  $use_rndc_config,
+  $use_rfc1918_zones,
   $dnssec_enable,
   $dnssec_validation,
   $dnssec_lookaside,
@@ -27,8 +30,6 @@ class bind (
   $check_names_response,
   $use_notify,
   $use_recursion,
-  $use_default_zones,
-  $use_rfc1918_zones,
   $listen_ipv4,
   $listen_ipv6,
   $avoid_v4_udp_ports,
@@ -42,6 +43,7 @@ class bind (
   $allow_query_cache,
   $forward_policy,
   $forwarders,
+  $rndc_key_secret = hmac('md5', $::fqdn, $::macaddress),
 ) {
   # Fail fast if we're not using a new Puppet version.
   if versioncmp($::puppetversion, '3.6.0') < 0 {
@@ -49,6 +51,10 @@ class bind (
   }
 
   validate_bool($::bind::purge_configuration)
+
+  validate_bool($::bind::use_rndc_key)
+  validate_bool($::bind::use_rndc_config)
+  validate_bool($::bind::use_rfc1918_zones)
 
   validate_string($::bind::dnssec_enable)
   validate_string($::bind::dnssec_validation)
@@ -72,9 +78,6 @@ class bind (
   validate_re($::bind::use_notify, '^(yes|no)$', "\$use_notify must be one of 'yes' or 'no'!")
   validate_re($::bind::use_recursion, '^(yes|no)$', "\$use_recursion must be one of 'yes' or 'no'!")
 
-  validate_bool($::bind::use_default_zones)
-  validate_bool($::bind::use_rfc1918_zones)
-
   validate_array($::bind::listen_ipv4)
   validate_array($::bind::listen_ipv6)
 
@@ -93,6 +96,8 @@ class bind (
   validate_re($::bind::forward_policy, '^(first|only)$', "\$forward_policy must be one of 'first' or 'only'!")
 
   validate_array($::bind::forwarders)
+
+  validate_string($::bind::rndc_key_secret)
 
   contain '::bind::install'
   contain '::bind::config'

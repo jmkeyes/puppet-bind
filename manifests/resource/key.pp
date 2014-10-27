@@ -34,15 +34,16 @@ define bind::resource::key (
   validate_string($algorithm)
   validate_re($algorithm, '^hmac-(md5|sha(1|224|256|384|512))$', "\$algorithm must be either HMAC-MD5 or in the HMAC-SHA(1-512) family!")
 
-  $key_conf_file = "${bind::config::shared_keys_directory}/${name}.conf"
+  $key_conf_file = "${bind::config::keys_directory}/${name}.conf"
 
   file { $key_conf_file:
-    ensure  => $ensure,
-    content => template("${module_name}/resource/key.conf.erb"),
-    require => File[$bind::config::shared_keys_directory],
-    owner   => $bind::config::daemon_owner,
-    group   => $bind::config::daemon_group,
-    mode    => '0640'
+    ensure       => $ensure,
+    content      => template("${module_name}/resource/key.conf.erb"),
+    require      => File[$bind::config::keys_directory],
+    validate_cmd => $::bind::config::validate_cmd,
+    owner        => $bind::config::daemon_owner,
+    group        => $bind::config::daemon_group,
+    mode         => '0600'
   }
 
   concat::fragment { "bind::resource::key::${name}":

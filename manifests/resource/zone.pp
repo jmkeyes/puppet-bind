@@ -4,7 +4,6 @@ define bind::resource::zone (
   $ensure         = present,
   $type           = undef,
   $source         = undef,
-  $overwrite      = false,
   $origin         = $name,
   $allow_update   = undef,
   $allow_notify   = undef,
@@ -15,7 +14,7 @@ define bind::resource::zone (
   $nameservers    = [ $::fqdn ],
 ) {
   validate_string($name)
-  validate_string($zone)
+  validate_string($origin)
 
   validate_string($ensure)
   validate_re($ensure, '^(present|absent|)$', "\$ensure must be one of 'absent' or 'present'!")
@@ -52,14 +51,15 @@ define bind::resource::zone (
     fail('Zone databases without backing source files are currently unsupported.')
   }
 
-  $database = "${bind::config::config_directory}/db.${name}"
+  $database = sprintf($::bind::config::zone_database_pattern, $name)
 
   file { $database:
-    ensure => $ensure,
-    owner  => $bind::config::daemon_owner,
-    group  => $bind::config::daemon_group,
-    source => $source,
-    mode   => '0644'
+    ensure       => $ensure,
+    validate_cmd => "test '${type}' = 'hint' || /usr/sbin/named-checkzone -q ${name} %",
+    owner        => $bind::config::daemon_owner,
+    group        => $bind::config::daemon_group,
+    source       => $source,
+    mode         => '0644'
   }
 
   concat::fragment { "bind::resource::zone::${name}::config":

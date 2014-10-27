@@ -16,8 +16,10 @@ class bind::service {
 
   if $::bind::service_manage {
     service { $::bind::service_name:
-      ensure => $::bind::service_ensure,
-      enable => $::bind::service_enable
+      ensure     => $::bind::service_ensure,
+      enable     => $::bind::service_enable,
+      hasstatus  => true,
+      hasrestart => true
     }
   }
 }

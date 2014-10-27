@@ -7,10 +7,10 @@ options {
         bindkeys-file "<%= scope['::bind::config::bind_keys_file'] %>";
 
         /* Where to store shared keys used in dynamic updates. */
-        key-directory "<%= scope['::bind::config::shared_keys_directory'] %>";
+        key-directory "<%= scope['::bind::config::keys_directory'] %>";
 
         /* Where to store the automatically maintained DNSSEC security roots. */
-        managed-keys-directory "<%= scope['::bind::config::managed_keys_directory'] %>";
+        managed-keys-directory "<%= scope['::bind::config::working_directory'] %>";
 
         /* Don't give away any compromising information. */
         version none;
@@ -88,31 +88,4 @@ options {
 
         /* Allow the following address to use the server's cached results. */
         allow-query-cache { <%= scope.function_coalesce_array([ scope['::bind::allow_query_cache'], 'none' ]) %> };
-};
-
-controls {
-        /* Bind to the following address(es)/port(s) with the named key(s) to control this daemon. */
-        inet 127.0.0.1 port 953 allow { 127.0.0.1; } keys { "rndc-key"; };
-};
-
-logging {
-        channel default_syslog {
-                /* Send most of the named messages to syslog. */
-                syslog local2;
-                severity debug;
-        };
-
-        category default { default_syslog; };
-        category general { default_syslog; };
-        category security { default_syslog; };
-        category config { default_syslog; };
-        category resolver { default_syslog; };
-        category xfer-in { default_syslog; };
-        category xfer-out { default_syslog; };
-        category notify { default_syslog; };
-        category client { default_syslog; };
-        category network { default_syslog; };
-        category update { default_syslog; };
-        category queries { default_syslog; };
-        category lame-servers { default_syslog; };
 };
