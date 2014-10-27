@@ -17,6 +17,9 @@ bind::config::options_config_path: /etc/bind/named.conf.options
 
 bind::config::dump_cache_file: /var/cache/bind/database.dump
 
+bind::config::statistics_file:    /var/cache/bind/database.stats
+bind::config::memstatistics_file: /var/cache/bind/database.memstats
+
 bind::config::rndc_key_path:    /etc/bind/rndc.key
 bind::config::rndc_config_path: /etc/bind/rndc.conf
 

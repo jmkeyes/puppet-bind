@@ -11,6 +11,8 @@ class bind::config (
   $local_config_path,
   $options_config_path,
   $dump_cache_file,
+  $statistics_file,
+  $memstatistics_file,
   $rndc_key_path,
   $rndc_config_path,
   $zone_database_pattern,
@@ -33,6 +35,8 @@ class bind::config (
   validate_absolute_path($::bind::config::options_config_path)
 
   validate_absolute_path($::bind::config::dump_cache_file)
+  validate_absolute_path($::bind::config::statistics_file)
+  validate_absolute_path($::bind::config::memstatistics_file)
 
   validate_absolute_path($::bind::config::rndc_key_path)
   validate_absolute_path($::bind::config::rndc_config_path)

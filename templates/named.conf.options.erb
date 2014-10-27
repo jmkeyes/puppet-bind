@@ -6,6 +6,10 @@ options {
         /* Where to dump the cache when issued 'rndc dumpdb'. */
         dump-file "<%= scope['::bind::config::dump_cache_file'] %>";
 
+        /* Where to dump statistics when issued 'rndc stats'. */
+        statistics-file "<%= scope['::bind::config::statistics_file'] %>";
+        memstatistics-file "<%= scope['::bind::config::memstatistics_file'] %>";
+
         /* Explicitly set the ISC DLV key file. */
         bindkeys-file "<%= scope['::bind::config::bind_keys_file'] %>";
 
