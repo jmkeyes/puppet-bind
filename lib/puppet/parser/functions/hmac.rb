@@ -8,7 +8,7 @@ module Puppet::Parser::Functions
     end
 
     # Open the requested digest algorithm and compute an HMAC with it.
-    digest = OpenSSL::Digest::Digest.new(arguments[0])
+    digest = OpenSSL::Digest.new(arguments[0])
     value  = OpenSSL::HMAC.digest(digest, arguments[1], arguments[2])
 
     # Encode the output in Base64.
