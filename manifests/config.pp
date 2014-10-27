@@ -37,6 +37,18 @@ class bind::config (
   $defined_keys  = hiera_hash('bind::keys', {})
   $defined_zones = hiera_hash('bind::zones', {})
 
+  group { $::bind::config::daemon_group:
+    ensure => present
+  }
+
+  user { $::bind::config::daemon_owner:
+    ensure   => present,
+    home     => $::bind::config::working_directory,
+    expiry   => absent,
+    system   => true,
+    password => '*'
+  }
+
   file { $::bind::config::config_directory:
     ensure  => directory,
     recurse => $::bind::purge_configuration,

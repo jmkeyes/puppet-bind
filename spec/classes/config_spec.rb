@@ -16,6 +16,9 @@ describe '::bind' do
           }
         end
 
+        it { should contain_user('bind') }
+        it { should contain_group('bind') }
+
         it { should contain_file('/etc/bind') }
         it { should contain_file('/etc/bind/keys') }
 
@@ -39,6 +42,9 @@ describe '::bind' do
             :osfamily        => 'RedHat',
           }
         end
+
+        it { should contain_user('named') }
+        it { should contain_group('named') }
 
         it { should contain_file('/etc/named') }
         it { should contain_file('/etc/named.keys.d') }
