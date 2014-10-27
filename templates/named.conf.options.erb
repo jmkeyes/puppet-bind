@@ -3,6 +3,9 @@ options {
         /* The working directory of the nameserver. */
         directory "<%= scope['::bind::config::working_directory'] %>";
 
+        /* Where to dump the cache when issued 'rndc dumpdb'. */
+        dump-file "<%= scope['::bind::config::dump_cache_file'] %>";
+
         /* Explicitly set the ISC DLV key file. */
         bindkeys-file "<%= scope['::bind::config::bind_keys_file'] %>";
 
