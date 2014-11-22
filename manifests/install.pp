@@ -13,5 +13,10 @@ class bind::install {
   package { $::bind::package_name:
     ensure => $::bind::package_ensure
   }
+
+  package { 'dnsruby':
+    ensure   => present,
+    provider => 'gem',
+  }
 }
 

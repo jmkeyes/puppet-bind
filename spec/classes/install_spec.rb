@@ -5,6 +5,7 @@ describe '::bind' do
     shared_examples "a Linux OS" do
       it { should compile.with_all_deps }
       it { should create_class('bind::install') }
+      it { should contain_package('dnsruby') }
     end
 
     context "on Debian" do
