@@ -28,13 +28,9 @@ You can also use a resource-like declaration if you'd like to:
 
 ## Configuration
 
-This module is built around `ripienaar/module_data` so all configuration should be stored in your
-Hiera configration. You can still use parameterized classes if you'd like but Hiera will make the
-task much easier. 
+All public configuration parameters can be found in [manifests/init.pp](manifests/init.pp).
 
-Hiera will handle all distribution-specific configuration, but if you have a custom distribution
-that you would like to support, you can override the keys within `data/osfamily/%{::osfamily}.yaml`
-in your local Hiera configuration. All other configuration keys are located in `data/common.yaml`.
+When a stable release is available, it's available parameters will be documented here.
 
 ## Todo
 
