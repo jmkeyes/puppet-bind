@@ -32,12 +32,3 @@ All public configuration parameters can be found in [manifests/init.pp](manifest
 
 When a stable release is available, it's available parameters will be documented here.
 
-## Todo
-
- * Improve RSpec tests; it currently only checks for catalog compilation failures.
- * Expand on user/group permissions; some distributions do things differently.
- * Improve zone/record synthesis; it should support comments as well.
- * Support SELinux on distributions that use it.
- * Properly support chrooted BIND servers.
- * Extend support to other distributions.
-
