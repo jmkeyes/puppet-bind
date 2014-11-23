@@ -43,7 +43,7 @@ class bind (
   $allow_query_cache,
   $forward_policy,
   $forwarders,
-  $rndc_key_secret = hmac('md5', $::fqdn, $::macaddress),
+  $rndc_key_secret = digest_random('md5'),
 ) {
   # Fail fast if we're not using a new Puppet version.
   if versioncmp($::puppetversion, '3.6.0') < 0 {
