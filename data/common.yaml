@@ -8,7 +8,6 @@ bind::purge_configuration: true
 
 bind::use_rndc_key:      true
 bind::use_rndc_config:   false
-bind::use_rfc1918_zones: false
 
 bind::use_notify:    'yes'
 bind::use_recursion: 'yes'

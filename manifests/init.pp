@@ -21,7 +21,6 @@ class bind (
   $purge_configuration,
   $use_rndc_key,
   $use_rndc_config,
-  $use_rfc1918_zones,
   $dnssec_enable,
   $dnssec_validation,
   $dnssec_lookaside,
@@ -54,7 +53,6 @@ class bind (
 
   validate_bool($::bind::use_rndc_key)
   validate_bool($::bind::use_rndc_config)
-  validate_bool($::bind::use_rfc1918_zones)
 
   validate_string($::bind::dnssec_enable)
   validate_string($::bind::dnssec_validation)
