@@ -130,21 +130,6 @@ class bind::config (
     refreshonly => true
   }
 
-  file {
-    "${::bind::config::working_directory}/managed-keys.bind":
-      ensure  => file,
-      owner   => $::bind::config::daemon_owner,
-      group   => $::bind::config::daemon_group,
-      mode    => '0644',
-      replace => false;
-    "${::bind::config::working_directory}/managed-keys.bind.jnl":
-      ensure  => file,
-      owner   => $::bind::config::daemon_owner,
-      group   => $::bind::config::daemon_group,
-      mode    => '0644',
-      replace => false;
-  }
-
   ### Ensure we have the DNSSEC anchors available.
   file { $::bind::config::bind_keys_file:
     ensure => file,
