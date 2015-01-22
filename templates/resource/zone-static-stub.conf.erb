@@ -1,0 +1,19 @@
+zone "<%= @origin %>" {
+        type static-stub;
+    <%- if @masters -%>
+        masters { <%= scope.function_coalesce_array([ @masters ]) %> };
+    <%- end -%>
+    <%- if @allow_transfer -%>
+        allow-transfer { <%= scope.function_coalesce_array([ @allow_transfer, 'none' ]) %> };
+    <%- end -%>
+    <%- if @forward_policy and @forwarders -%>
+        forward <%= @forward_policy %>;
+        forwarders { <%= scope.function_coalesce_array([ @forwarders ]) %> };
+    <%- end -%>
+    <%- if @server_addresses -%>
+        server-names { <%= scope.function_coalesce_array([ @server_addresses ]) %> };
+    <%- end -%>
+    <%- if @server_names -%>
+        server-names { <%= scope.function_coalesce_array([ @server_names ]) %> };
+    <%- end -%>
+};
