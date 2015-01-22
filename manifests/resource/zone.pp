@@ -1,17 +1,19 @@
 # == Resource: bind::resource::zone
 
 define bind::resource::zone (
-  $ensure         = present,
-  $type           = undef,
-  $source         = undef,
-  $origin         = $name,
-  $allow_update   = undef,
-  $allow_notify   = undef,
-  $allow_transfer = undef,
-  $masters        = undef,
-  $forwarders     = undef,
-  $forward_policy = undef,
-  $nameservers    = [ $::fqdn ],
+  $ensure           = present,
+  $type             = undef,
+  $source           = undef,
+  $origin           = $name,
+  $allow_update     = undef,
+  $allow_notify     = undef,
+  $allow_transfer   = undef,
+  $masters          = undef,
+  $forwarders       = undef,
+  $forward_policy   = undef,
+  $server_names     = undef,
+  $server_addresses = undef,
+  $nameservers      = [ $::fqdn ],
 ) {
   validate_string($name)
   validate_string($origin)
@@ -20,7 +22,7 @@ define bind::resource::zone (
   validate_re($ensure, '^(present|absent|)$', "\$ensure must be one of 'absent' or 'present'!")
 
   validate_string($type)
-  validate_re($type, '^(forward||hint|master|slave|stub)$', "\$type must be one of 'forward', 'hint', 'master', 'slave', or 'stub'!")
+  validate_re($type, '^(forward||hint|master|slave|stub|static-stub)$', "\$type must be one of 'forward', 'hint', 'master', 'slave', 'stub', or 'static-stub'!")
 
   if $allow_update {
     validate_array($allow_update)
@@ -43,6 +45,14 @@ define bind::resource::zone (
     validate_re($forward_policy, '^(first|only)$', "\$forward_policy must be one of 'first' or 'only'!")
 
     validate_array($forwarders)
+  }
+
+  if $server_names {
+    validate_array($server_names)
+  }
+
+  if $server_addresses {
+    validate_array($server_addresses)
   }
 
   validate_array($nameservers)
