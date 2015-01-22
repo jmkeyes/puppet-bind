@@ -24,9 +24,6 @@ class bind (
   $dnssec_enable,
   $dnssec_validation,
   $dnssec_lookaside,
-  $check_names_master,
-  $check_names_slave,
-  $check_names_response,
   $use_notify,
   $use_recursion,
   $listen_ipv4,
@@ -61,14 +58,6 @@ class bind (
   validate_re($::bind::dnssec_enable, '^(yes|no)$', "\$dnssec_enable must be one of 'yes' or 'no'!")
   validate_re($::bind::dnssec_validation, '^(yes|no|auto)$', "\$dnssec_validation must be one of 'yes', 'no' or 'auto'!")
   validate_re($::bind::dnssec_lookaside, '^(yes|no|auto)$', "\$dnssec_lookaside must be one of 'yes', 'no' or 'auto'!")
-
-  validate_string($::bind::check_names_master)
-  validate_string($::bind::check_names_slave)
-  validate_string($::bind::check_names_response)
-
-  validate_re($::bind::check_names_master, '^(none|warn|fail|ignore)$', "\$check_names_master must be one of 'none', 'warn', 'fail', or 'ignore'!")
-  validate_re($::bind::check_names_slave, '^(none|warn|fail|ignore)$', "\$check_names_slave must be one of 'none', 'warn', 'fail', or 'ignore'!")
-  validate_re($::bind::check_names_response, '^(none|warn|fail|ignore)$', "\$check_names_response must be one of 'none', 'warn', 'fail', or 'ignore'!")
 
   validate_string($::bind::use_notify)
   validate_string($::bind::use_recursion)
