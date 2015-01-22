@@ -130,15 +130,6 @@ class bind::config (
     refreshonly => true
   }
 
-  ### Ensure we have the DNSSEC anchors available.
-  file { $::bind::config::bind_keys_file:
-    ensure => file,
-    source => "puppet:///modules/${module_name}/bind.keys",
-    owner  => $::bind::config::daemon_owner,
-    group  => $::bind::config::daemon_group,
-    mode   => '0644'
-  }
-
   ### Using an rndc config file and a key will create weirdness.
   if $::bind::use_rndc_config and $::bind::use_rndc_key {
     warning('Using rndc configuration file will override rndc key file!')
@@ -169,6 +160,15 @@ class bind::config (
       group   => $::bind::config::daemon_group,
       mode    => '0600'
     }
+  }
+
+  ### Ensure we have the DNSSEC anchors available.
+  file { $::bind::config::bind_keys_file:
+    ensure => file,
+    source => "puppet:///modules/${module_name}/bind.keys",
+    owner  => $::bind::config::daemon_owner,
+    group  => $::bind::config::daemon_group,
+    mode   => '0644'
   }
 
   ### Create the root zone hints.
