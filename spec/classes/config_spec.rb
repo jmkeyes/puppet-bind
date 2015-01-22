@@ -6,10 +6,6 @@ describe '::bind' do
       it { should compile.with_all_deps }
       it { should create_class('bind::config') }
       it { should contain_bind__resource__zone('root') }
-      it { should contain_bind__resource__zone('localhost') }
-      it { should contain_bind__resource__zone('0.in-addr.arpa') }
-      it { should contain_bind__resource__zone('127.in-addr.arpa') }
-      it { should contain_bind__resource__zone('255.in-addr.arpa') }
     end
 
     context "on Debian" do
