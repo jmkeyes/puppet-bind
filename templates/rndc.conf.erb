@@ -1,11 +1,11 @@
 /* This file is managed by Puppet. Any changes will be overridden. */
 key "rndc-key" {
-  algorithm hmac-md5;
-  secret "<%= scope['::bind::rndc_key_secret'] %>";
+    algorithm hmac-md5;
+    secret "<%= scope['::bind::rndc_key_secret'] %>";
 };
 
 options {
-  default-key "rndc-key";
-  default-server 127.0.0.1;
-  default-port 953;
+    default-key "rndc-key";
+    default-server 127.0.0.1;
+    default-port 953;
 };
